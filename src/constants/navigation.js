@@ -2,7 +2,7 @@ export const NAV_LINKS = [
   { name: 'Home', path: '/' },
   { name: 'Calculate Tax', path: '/calculate' },
   { name: 'Tax Guide', path: '/tax-guide' },
-  { name: 'Tax Rules', path: '/rules' },
+  { name: 'Tax Rules', path: '/tax-rules' },
   { name: 'FAQ', path: '/faq' },
   { name: 'About', path: '/about' },
 ];
@@ -12,7 +12,7 @@ export const FOOTER_LINKS = {
     { name: 'Home', path: '/' },
     { name: 'Calculate Tax', path: '/calculate' },
     { name: 'Tax Guide', path: '/tax-guide' },
-    { name: 'Tax Rules', path: '/rules' },
+    { name: 'Tax Rules', path: '/tax-rules' },
     { name: 'Admin Rules', path: '/admin/tax-rules' },
     { name: 'FAQ', path: '/faq' },
     { name: 'About TaxBD', path: '/about' },

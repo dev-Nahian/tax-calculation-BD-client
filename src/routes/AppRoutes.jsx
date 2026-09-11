@@ -21,7 +21,8 @@ export const AppRoutes = () => {
         <Route path="tax-guide/:slug" element={<TaxGuideArticlePage />} />
         <Route path="guide" element={<Navigate to="/tax-guide" replace />} />
         <Route path="guide/:slug" element={<TaxGuideArticlePage />} />
-        <Route path="rules" element={<RulesPage />} />
+        <Route path="tax-rules" element={<RulesPage />} />
+        <Route path="rules" element={<Navigate to="/tax-rules" replace />} />
         <Route path="faq" element={<FAQPage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="admin/tax-rules" element={<AdminTaxRulesPage />} />
