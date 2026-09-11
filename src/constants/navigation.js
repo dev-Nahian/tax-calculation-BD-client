@@ -13,6 +13,7 @@ export const FOOTER_LINKS = {
     { name: 'Calculate Tax', path: '/calculate' },
     { name: 'Tax Guide', path: '/guide' },
     { name: 'Tax Rules', path: '/rules' },
+    { name: 'Admin Rules', path: '/admin/tax-rules' },
     { name: 'FAQ', path: '/faq' },
     { name: 'About TaxBD', path: '/about' },
   ],

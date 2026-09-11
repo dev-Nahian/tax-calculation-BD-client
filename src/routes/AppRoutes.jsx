@@ -7,6 +7,7 @@ import GuidePage from '../pages/GuidePage';
 import RulesPage from '../pages/RulesPage';
 import FAQPage from '../pages/FAQPage';
 import AboutPage from '../pages/AboutPage';
+import AdminTaxRulesPage from '../pages/AdminTaxRulesPage';
 import NotFoundPage from '../pages/NotFoundPage';
 
 export const AppRoutes = () => {
@@ -19,6 +20,7 @@ export const AppRoutes = () => {
         <Route path="rules" element={<RulesPage />} />
         <Route path="faq" element={<FAQPage />} />
         <Route path="about" element={<AboutPage />} />
+        <Route path="admin/tax-rules" element={<AdminTaxRulesPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
