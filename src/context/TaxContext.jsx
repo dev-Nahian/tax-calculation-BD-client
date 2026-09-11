@@ -164,9 +164,10 @@ export const TaxProvider = ({ children }) => {
         taxpayerProfile: {
           category,
           zone,
-          hasDisabledChild: activeInputs.hasDisabledChild || false,
+          hasDisabledChild: Boolean(activeInputs.disabledChildrenCount > 0 || activeInputs.hasDisabledChild),
+          disabledChildrenCount: Number(activeInputs.disabledChildrenCount || 0),
           isGazettedFreedomFighter: category === 'freedomFighter',
-          age: activeInputs.age || 30,
+          age: Number(activeInputs.age || 30),
         },
         income: {
           salary: {
@@ -185,10 +186,18 @@ export const TaxProvider = ({ children }) => {
           otherSources: Number(activeInputs.otherIncome || 0),
         },
         rebates: {
-          investments: activeInputs.investments || {},
+          dps: Number(activeInputs.investments?.dps || 0),
+          sanchayapatra: Number(activeInputs.investments?.sanchayapatra || 0),
+          lifeInsurance: Number(activeInputs.investments?.lifeInsurance || 0),
+          stockMarket: Number(activeInputs.investments?.stockMarket || 0),
+          providentFund: Number(activeInputs.investments?.providentFund || 0),
+          otherEligible: Number(activeInputs.investments?.otherEligible || 0),
+          ...(activeInputs.investments || {}),
         },
         otherInformation: {
-          netWealth: Number(activeInputs.netWealth || 0),
+          netWealth: Number(activeInputs.otherInformation?.netWealth || activeInputs.netWealth || 0),
+          ownsMultipleCars: Boolean(activeInputs.otherInformation?.ownsMultipleCars ?? activeInputs.ownsMultipleCars),
+          ownsLargeHouseProperty: Boolean(activeInputs.otherInformation?.ownsLargeHouseProperty ?? activeInputs.ownsLargeHouseProperty),
         },
       };
 

@@ -1,0 +1,105 @@
+import React, { useState } from 'react';
+import { formatBDT, formatShortBDT } from '../../utils/formatters';
+import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
+
+export const IncomeCard = ({
+  icon: Icon,
+  title,
+  subtitle,
+  value,
+  onChange,
+  id,
+  placeholder = '0',
+  children,
+  badge,
+  colorScheme = 'emerald',
+}) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const numValue = Number(value) || 0;
+
+  // Format with South Asian commas for display in helper
+  const formattedHelp = numValue > 0 ? formatShortBDT(numValue) : null;
+
+  const colorStyles = {
+    emerald: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+    blue: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+    purple: 'bg-purple-500/10 text-purple-600 border-purple-500/20',
+    amber: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+    indigo: 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20',
+    teal: 'bg-teal-500/10 text-teal-600 border-teal-500/20',
+  };
+
+  const activeColor = colorStyles[colorScheme] || colorStyles.emerald;
+
+  return (
+    <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start gap-3.5">
+          <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border ${activeColor}`}>
+            <Icon className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-bold text-slate-800">{title}</h3>
+              {badge && (
+                <span className="px-2 py-0.5 text-[11px] font-semibold bg-brand-50 text-brand-700 rounded-full border border-brand-200/60">
+                  {badge}
+                </span>
+              )}
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5 leading-relaxed">{subtitle}</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <label htmlFor={id} className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          Annual Amount
+        </label>
+        <div className="relative w-full sm:w-64">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-sm">
+            ৳
+          </div>
+          <input
+            id={id}
+            type="number"
+            min="0"
+            step="1000"
+            value={value === 0 ? '' : value}
+            onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
+            placeholder={placeholder}
+            className="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-right"
+          />
+          {formattedHelp && (
+            <span className="block text-right text-[11px] font-medium text-emerald-600 mt-1">
+              ≈ {formattedHelp}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {children && (
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors"
+          >
+            {isExpanded ? (
+              <>
+                <ChevronUp className="w-4 h-4" /> Hide itemized breakdown
+              </>
+            ) : (
+              <>
+                <ChevronDown className="w-4 h-4" /> Itemize salary allowances (Exemptions apply)
+              </>
+            )}
+          </button>
+          {isExpanded && <div className="mt-3 pt-3 border-t border-slate-100">{children}</div>}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default IncomeCard;
