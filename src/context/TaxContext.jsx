@@ -158,18 +158,61 @@ export const TaxProvider = ({ children }) => {
     const activeInputs = overrideInputs || inputs;
 
     try {
-      // Try API first
-      const res = await calculateTaxEstimateApi({
+      // Build standard payload for TaxEngine
+      const payload = {
         assessmentYear,
-        category,
-        zone,
-        inputs: activeInputs,
-      });
+        taxpayerProfile: {
+          category,
+          zone,
+          hasDisabledChild: activeInputs.hasDisabledChild || false,
+          isGazettedFreedomFighter: category === 'freedomFighter',
+          age: activeInputs.age || 30,
+        },
+        income: {
+          salary: {
+            basicSalary: Number(activeInputs.salaryIncome || 0),
+            houseRentAllowance: Number(activeInputs.houseRentAllowance || 0),
+            medicalAllowance: Number(activeInputs.medicalAllowance || 0),
+            conveyanceAllowance: Number(activeInputs.conveyanceAllowance || 0),
+            festivalBonus: Number(activeInputs.festivalBonus || 0),
+            otherAllowances: Number(activeInputs.otherAllowances || 0),
+          },
+          houseProperty: Number(activeInputs.housePropertyIncome || 0),
+          agriculture: Number(activeInputs.agricultureIncome || 0),
+          business: Number(activeInputs.businessIncome || 0),
+          capitalGains: Number(activeInputs.capitalGains || 0),
+          financialAssets: Number(activeInputs.financialAssets || 0),
+          otherSources: Number(activeInputs.otherIncome || 0),
+        },
+        rebates: {
+          investments: activeInputs.investments || {},
+        },
+        otherInformation: {
+          netWealth: Number(activeInputs.netWealth || 0),
+        },
+      };
 
-      if (res?.data?.results) {
-        setResults(res.data.results);
+      const res = await calculateTaxEstimateApi(payload);
+
+      if (res?.data) {
+        const d = res.data;
+        setResults({
+          ...d,
+          grossIncome: d.grossIncome ?? d.totalGrossIncome ?? 0,
+          totalExemptions: d.totalExemptions ?? 0,
+          taxableIncome: d.taxableIncome ?? 0,
+          grossTaxLiability: d.regularTax ?? d.grossTaxLiability ?? 0,
+          eligibleInvestment: d.allowableInvestment ?? d.eligibleInvestment ?? 0,
+          investmentRebate: d.rebate ?? d.investmentRebate ?? 0,
+          netTaxBeforeMinimum: d.netTaxBeforeMinimum ?? Math.max(0, (d.regularTax || 0) - (d.rebate || 0)),
+          minimumTax: d.minimumTax ?? 0,
+          surcharge: d.surcharge ?? 0,
+          finalTaxLiability: d.totalTax ?? d.finalTaxLiability ?? 0,
+          effectiveTaxRate: d.effectiveTaxRate ?? 0,
+          slabBreakdown: d.slabBreakdown || [],
+          sources: d.sources || [],
+        });
       } else {
-        // Fallback to local computation
         const localRes = calculateLocalEstimate(activeInputs, category, zone);
         setResults(localRes);
       }
