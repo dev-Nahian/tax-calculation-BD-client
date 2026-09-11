@@ -1,0 +1,56 @@
+export const RULES_BY_YEAR = {
+  '2024-2025': {
+    assessmentYear: '2024-2025',
+    incomeYear: '2023-2024',
+    status: 'Current Applicable Law',
+    act: 'Bangladesh Income Tax Act 2023 & Finance Act 2024',
+    exemptionThresholds: [
+      { category: 'General Individual (Male)', limit: '৳3,50,000' },
+      { category: 'Female Taxpayers', limit: '৳4,00,000' },
+      { category: 'Senior Citizens (Age 65+)', limit: '৳4,00,000' },
+      { category: 'Persons with Disabilities', limit: '৳4,75,000' },
+      { category: 'Gazetted Freedom Fighters', limit: '৳5,00,000' },
+      { category: 'Parent / Legal Guardian of disabled person', limit: '+ ৳50,000 extra per child' },
+    ],
+    slabs: [
+      { range: 'First ৳3,50,000 (or exemption limit)', rate: '0%', description: 'Tax-free ceiling' },
+      { range: 'Next ৳1,00,000', rate: '5%', description: 'Lowest taxable tier' },
+      { range: 'Next ৳4,00,000', rate: '10%', description: 'Middle bracket' },
+      { range: 'Next ৳5,00,000', rate: '15%', description: 'Upper middle bracket' },
+      { range: 'Next ৳5,00,000', rate: '20%', description: 'Higher bracket' },
+      { range: 'Remaining Balance', rate: '25%', description: 'Top marginal tax bracket' },
+    ],
+    minimumTaxes: [
+      { area: 'Dhaka and Chattogram City Corporations', amount: '৳5,000' },
+      { area: 'Other City Corporations', amount: '৳4,000' },
+      { area: 'Outside City Corporations (Municipalities/Rural)', amount: '৳3,000' },
+    ],
+  },
+  '2025-2026': {
+    assessmentYear: '2025-2026',
+    incomeYear: '2024-2025',
+    status: 'Upcoming / Finance Bill Framework',
+    act: 'Income Tax Act 2023 & Finance Bill Projections',
+    exemptionThresholds: [
+      { category: 'General Individual (Male)', limit: '৳3,75,000' },
+      { category: 'Female Taxpayers', limit: '৳4,25,000' },
+      { category: 'Senior Citizens (Age 65+)', limit: '৳4,25,000' },
+      { category: 'Persons with Disabilities', limit: '৳5,00,000' },
+      { category: 'Gazetted Freedom Fighters', limit: '৳5,25,000' },
+      { category: 'Parent / Legal Guardian of disabled person', limit: '+ ৳50,000 extra' },
+    ],
+    slabs: [
+      { range: 'First ৳3,75,000 (or exemption limit)', rate: '0%', description: 'Tax-free ceiling' },
+      { range: 'Next ৳1,00,000', rate: '5%', description: 'Lowest taxable tier' },
+      { range: 'Next ৳4,00,000', rate: '10%', description: 'Middle bracket' },
+      { range: 'Next ৳5,00,000', rate: '15%', description: 'Upper middle bracket' },
+      { range: 'Next ৳5,00,000', rate: '20%', description: 'Higher bracket' },
+      { range: 'Remaining Balance', rate: '25%', description: 'Top marginal tax bracket' },
+    ],
+    minimumTaxes: [
+      { area: 'Dhaka and Chattogram City Corporations', amount: '৳5,000' },
+      { area: 'Other City Corporations', amount: '৳4,000' },
+      { area: 'Outside City Corporations (Municipalities/Rural)', amount: '৳3,000' },
+    ],
+  },
+};

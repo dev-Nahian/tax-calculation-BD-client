@@ -1,0 +1,137 @@
+import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, BookOpen, ShieldCheck, CheckCircle2, Sparkles, TrendingUp } from 'lucide-react';
+import gsap from 'gsap';
+import Button from '../common/Button';
+import Badge from '../common/Badge';
+import VisualFlow from './VisualFlow';
+
+export const Hero = () => {
+  const heroRef = useRef(null);
+  const headlineRef = useRef(null);
+  const subtextRef = useRef(null);
+  const buttonsRef = useRef(null);
+  const flowRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+      tl.fromTo(
+        headlineRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8 }
+      )
+        .fromTo(
+          subtextRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6 },
+          '-=0.4'
+        )
+        .fromTo(
+          buttonsRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.5 },
+          '-=0.3'
+        )
+        .fromTo(
+          flowRef.current,
+          { opacity: 0, y: 35, scale: 0.98 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.8 },
+          '-=0.2'
+        );
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={heroRef} className="relative pt-10 pb-16 md:pt-16 md:pb-24 overflow-hidden">
+      {/* Background ambient lighting */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-gradient-to-b from-brand-100/40 via-emerald-50/20 to-transparent blur-3xl -z-10 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-4xl mx-auto mb-10 md:mb-14">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 mb-6">
+            <Badge variant="emerald" size="md" icon={ShieldCheck} className="shadow-subtle">
+              Updated for Assessment Year 2024-2025 (Act 2023)
+            </Badge>
+          </div>
+
+          {/* Headline */}
+          <h1
+            ref={headlineRef}
+            className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.12] mb-6 text-balance"
+          >
+            Know Your Bangladesh{' '}
+            <span className="text-brand-900 bg-gradient-to-r from-brand-900 via-emerald-800 to-teal-900 bg-clip-text text-transparent">
+              Income Tax.
+            </span>
+          </h1>
+
+          {/* Supporting Text */}
+          <p
+            ref={subtextRef}
+            className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8 text-balance font-normal"
+          >
+            Estimate your income tax, understand the calculation, and learn which rules apply to you.
+          </p>
+
+          {/* Action CTAs */}
+          <div
+            ref={buttonsRef}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4"
+          >
+            <Link to="/calculate" className="w-full sm:w-auto">
+              <Button
+                variant="primary"
+                size="lg"
+                icon={ArrowRight}
+                iconPosition="right"
+                className="w-full sm:w-auto shadow-md hover:shadow-lg font-semibold"
+              >
+                Calculate My Tax
+              </Button>
+            </Link>
+
+            <Link to="/guide" className="w-full sm:w-auto">
+              <Button
+                variant="outline"
+                size="lg"
+                icon={BookOpen}
+                iconPosition="left"
+                className="w-full sm:w-auto font-medium"
+              >
+                Learn How Tax Works
+              </Button>
+            </Link>
+          </div>
+
+          {/* Value highlights below CTA */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-medium text-slate-500">
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>100% Free & Open</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>No Sign-Up Required</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <span>Accurate Slabs & Rebates</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Visual Diagram: Income -> Tax Rules -> Calculation -> Result */}
+        <div ref={flowRef} className="max-w-5xl mx-auto">
+          <VisualFlow />
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
