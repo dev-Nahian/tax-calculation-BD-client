@@ -3,8 +3,10 @@ import { HelpCircle, ChevronDown, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Badge from '../common/Badge';
 import { FAQ_ITEMS } from '../../constants/faqData';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const FAQPreview = () => {
+  const { language } = useLanguage();
   const [openIndex, setOpenIndex] = useState(0);
 
   const previewFaqs = FAQ_ITEMS.slice(0, 4);
@@ -14,13 +16,15 @@ export const FAQPreview = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <Badge variant="primary" icon={HelpCircle} className="mb-3">
-            Got Questions?
+            {language === 'bn' ? 'সাধারণ জিজ্ঞাসা' : 'Got Questions?'}
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 text-balance">
-            Frequently Asked Questions
+            {language === 'bn' ? 'সচরাচর জিজ্ঞাসিত প্রশ্নাবলি (FAQ)' : 'Frequently Asked Questions'}
           </h2>
           <p className="text-base text-slate-600 leading-relaxed text-balance">
-            Quick answers to the most common queries regarding Bangladesh income tax calculations and filing.
+            {language === 'bn'
+              ? 'বাংলাদেশ আয়কর গণনা ও রিটার্ন দাখিল সম্পর্কিত প্রয়োজনীয় সাধারণ প্রশ্নের চটজলদি উত্তর।'
+              : 'Quick answers to the most common queries regarding Bangladesh income tax calculations and filing.'}
           </p>
         </div>
 
@@ -63,10 +67,10 @@ export const FAQPreview = () => {
 
         <div className="text-center mt-10">
           <Link
-            to="/faq"
+            to="/tax-guide"
             className="inline-flex items-center gap-2 text-sm font-bold text-brand-900 hover:text-brand-700 transition-colors"
           >
-            <span>View all questions & answers</span>
+            <span>{language === 'bn' ? 'সকল আয়কর গাইড ও নির্দেশিকা দেখুন' : 'View all questions & tax guides'}</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

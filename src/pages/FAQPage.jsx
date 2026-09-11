@@ -3,13 +3,22 @@ import PageHero from '../components/common/PageHero';
 import { HelpCircle, Search, ChevronDown } from 'lucide-react';
 import { FAQ_ITEMS } from '../constants/faqData';
 import Card from '../components/common/Card';
+import { useLanguage } from '../context/LanguageContext';
 
 export const FAQPage = () => {
+  const { t, language } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [openIndex, setOpenIndex] = useState(null);
 
-  const categories = ['All', 'General', 'Calculation', 'Investment Rebate', 'Minimum Tax', 'e-TIN & Filing'];
+  const categories = [
+    { id: 'All', label: language === 'bn' ? 'সকল প্রশ্ন' : 'All' },
+    { id: 'General', label: language === 'bn' ? 'সাধারণ' : 'General' },
+    { id: 'Calculation', label: language === 'bn' ? 'কর হিসাব' : 'Calculation' },
+    { id: 'Investment Rebate', label: language === 'bn' ? 'বিনিয়োগ রেয়াত' : 'Investment Rebate' },
+    { id: 'Minimum Tax', label: language === 'bn' ? 'ন্যূনতম কর' : 'Minimum Tax' },
+    { id: 'e-TIN & Filing', label: language === 'bn' ? 'ই-টিআইএন ও রিটার্ন' : 'e-TIN & Filing' },
+  ];
 
   const filteredFaqs = FAQ_ITEMS.filter((item) => {
     const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
@@ -22,10 +31,12 @@ export const FAQPage = () => {
   return (
     <div className="pb-16">
       <PageHero
-        badge="Help & Knowledge Base"
+        badge={language === 'bn' ? 'সহায়তা ও জ্ঞানভাণ্ডার' : 'Help & Knowledge Base'}
         badgeIcon={HelpCircle}
-        title="Bangladesh Tax FAQs"
-        subtitle="Clear, verified answers to common questions about taxable income, slab rates, deductions, and NBR filing compliance."
+        title={language === 'bn' ? 'বাংলাদেশ আয়কর সম্পর্কিত প্রশ্নোত্তর (FAQ)' : 'Bangladesh Tax FAQs'}
+        subtitle={language === 'bn'
+          ? 'করযোগ্য আয়, কর ধাপ, রেয়াত এবং এনবিআর রিটার্ন দাখিল সংক্রান্ত সাধারণ প্রশ্নের সহজ উত্তর।'
+          : 'Clear, verified answers to common questions about taxable income, slab rates, deductions, and NBR filing compliance.'}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -35,7 +46,7 @@ export const FAQPage = () => {
             <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search tax questions (e.g. salary, rebate, DPS, deadline)..."
+              placeholder={language === 'bn' ? 'আয়কর বিষয়ক প্রশ্ন খুঁজুন (যেমন: বেতন, রেয়াত, ডিপিএস, রিটার্ন)...' : 'Search tax questions (e.g. salary, rebate, DPS, deadline)...'}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-11 pr-4 py-3 rounded-2xl bg-white border border-slate-300 text-sm focus:ring-2 focus:ring-brand-700 focus:border-brand-700 shadow-sm"
@@ -45,16 +56,16 @@ export const FAQPage = () => {
           <div className="flex flex-wrap items-center gap-2">
             {categories.map((cat) => (
               <button
-                key={cat}
+                key={cat.id}
                 type="button"
-                onClick={() => setSelectedCategory(cat)}
+                onClick={() => setSelectedCategory(cat.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  selectedCategory === cat
+                  selectedCategory === cat.id
                     ? 'bg-brand-900 text-white shadow-sm'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
                 }`}
               >
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>

@@ -23,10 +23,11 @@ import SourceModal from '../components/common/SourceModal';
 import RulesComparison from '../components/rules/RulesComparison';
 import WhatsChangedTimeline from '../components/rules/WhatsChangedTimeline';
 import { RULES_BY_YEAR } from '../constants/rulesData';
-import { formatBDT } from '../utils/formatters';
+import { useLanguage } from '../context/LanguageContext';
 import { Link } from 'react-router-dom';
 
 export const RulesPage = () => {
+  const { t, formatMoney, formatNumber, language } = useLanguage();
   const [activeTab, setActiveTab] = useState('explorer'); // 'explorer' | 'compare' | 'changes'
   const [selectedYear, setSelectedYear] = useState('2024-2025');
   const [selectedSource, setSelectedSource] = useState(null);
@@ -39,7 +40,7 @@ export const RulesPage = () => {
     setSelectedSource(
       source || {
         title: currentRule.act,
-        authority: 'National Board of Revenue (NBR), Government of Bangladesh',
+        authority: language === 'bn' ? 'জাতীয় রাজস্ব বোর্ড (NBR), গণপ্রজাতন্ত্রী বাংলাদেশ সরকার' : 'National Board of Revenue (NBR), Government of Bangladesh',
         referenceNumber: currentRule.gazetteRef,
         assessmentYear: currentRule.assessmentYear,
         description: `Official statutory provisions enacted for Assessment Year ${currentRule.assessmentYear}.`,
@@ -53,10 +54,10 @@ export const RulesPage = () => {
     <div className="pb-24 animate-fadeIn">
       {/* Page Hero */}
       <PageHero
-        badge="Regulatory Explorer"
+        badge={language === 'bn' ? 'সংবিধিবদ্ধ আইন ভাণ্ডার' : 'Regulatory Explorer'}
         badgeIcon={Scale}
-        title="Bangladesh Tax Rules Explorer"
-        subtitle="Explore official statutory tax slabs, exemption thresholds, Section 78 rebates, and year-over-year legislative changes."
+        title={t('rules.title')}
+        subtitle={t('rules.subtitle')}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 space-y-8">
@@ -72,7 +73,7 @@ export const RulesPage = () => {
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              <Layers className="w-4 h-4" /> Rules Explorer
+              <Layers className="w-4 h-4" /> {t('rules.tabs.explorer')}
             </button>
 
             <button
@@ -84,7 +85,7 @@ export const RulesPage = () => {
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              <Scale className="w-4 h-4" /> Compare Years
+              <Scale className="w-4 h-4" /> {t('rules.tabs.compare')}
             </button>
 
             <button
@@ -96,7 +97,7 @@ export const RulesPage = () => {
                   : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
               }`}
             >
-              <Sparkles className="w-4 h-4" /> What's Changed?
+              <Sparkles className="w-4 h-4" /> {t('rules.tabs.whatsChanged')}
             </button>
           </div>
 
@@ -105,7 +106,7 @@ export const RulesPage = () => {
             <div className="flex items-center gap-2 self-end sm:self-auto">
               <Calendar className="w-4 h-4 text-slate-400" />
               <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                Select Year:
+                {language === 'bn' ? 'করবর্ষ নির্বাচন:' : 'Select Year:'}
               </span>
               <select
                 value={selectedYear}
@@ -114,7 +115,7 @@ export const RulesPage = () => {
               >
                 {availableYears.map((yr) => (
                   <option key={yr} value={yr}>
-                    AY {yr}
+                    {language === 'bn' ? `করবর্ষ ${yr}` : `AY ${yr}`}
                   </option>
                 ))}
               </select>
@@ -130,13 +131,17 @@ export const RulesPage = () => {
               <div className="space-y-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 text-emerald-300 rounded-full text-xs font-extrabold uppercase tracking-wider border border-emerald-500/30">
                   <Sparkles className="w-3.5 h-3.5" />
-                  <span>Statutory Rules Package — AY {currentRule.assessmentYear}</span>
+                  <span>
+                    {language === 'bn'
+                      ? `সংবিধিবদ্ধ কর প্যাকেজ — করবর্ষ ${currentRule.assessmentYear}`
+                      : `Statutory Rules Package — AY ${currentRule.assessmentYear}`}
+                  </span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
                   {currentRule.act}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                  {currentRule.gazetteRef} • Income Year: {currentRule.incomeYear} • Status: {currentRule.status}
+                  {currentRule.gazetteRef} • {language === 'bn' ? `আয়বর্ষ: ${currentRule.incomeYear}` : `Income Year: ${currentRule.incomeYear}`} • {language === 'bn' ? `অবস্থা: ${currentRule.status}` : `Status: ${currentRule.status}`}
                 </p>
               </div>
 
@@ -146,14 +151,14 @@ export const RulesPage = () => {
                   onClick={() => openSourceModal(null)}
                   className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold border border-white/20 backdrop-blur-sm transition-all flex items-center gap-2"
                 >
-                  <ExternalLink className="w-4 h-4" /> View Gazette Reference
+                  <ExternalLink className="w-4 h-4" /> {language === 'bn' ? 'গেজেট সূত্র দেখুন' : 'View Gazette Reference'}
                 </button>
 
                 <Link
                   to="/calculate"
                   className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold shadow-lg transition-all flex items-center gap-2"
                 >
-                  Calculate with AY {selectedYear}
+                  {language === 'bn' ? `করবর্ষ ${selectedYear} দিয়ে হিসাব করুন` : `Calculate with AY ${selectedYear}`}
                 </Link>
               </div>
             </div>
@@ -168,10 +173,10 @@ export const RulesPage = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-slate-900">
-                      Taxpayer Categories & Thresholds
+                      {language === 'bn' ? 'করদাতার শ্রেণি ও করমুক্ত সীমা' : 'Taxpayer Categories & Thresholds'}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Statutory tax-free limits (First Schedule)
+                      {language === 'bn' ? 'প্রথম তফসিল অনুযায়ী করমুক্ত আয়ের সীমা' : 'Statutory tax-free limits (First Schedule)'}
                     </p>
                   </div>
                 </div>
@@ -189,7 +194,7 @@ export const RulesPage = () => {
                         <span className="text-[11px] text-slate-500">{item.description}</span>
                       </div>
                       <span className="text-xs sm:text-sm font-black text-emerald-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200 shrink-0 ml-2">
-                        {item.formatted}
+                        {formatMoney(item.amount)}
                       </span>
                     </div>
                   ))}
@@ -204,10 +209,10 @@ export const RulesPage = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-slate-900">
-                      Progressive Income Tax Slabs
+                      {language === 'bn' ? 'প্রগতিশীল আয়করের ধাপসমূহ' : 'Progressive Income Tax Slabs'}
                     </h3>
                     <p className="text-xs text-slate-500">
-                      Marginal progressive rates applied tier-by-tier
+                      {language === 'bn' ? 'বিভিন্ন আয়ের স্তরে আরোপিত ক্রমান্বয়িক করের হার' : 'Marginal progressive rates applied tier-by-tier'}
                     </p>
                   </div>
                 </div>
@@ -216,9 +221,9 @@ export const RulesPage = () => {
                   <table className="w-full text-left text-xs sm:text-sm">
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold text-[11px] uppercase tracking-wider">
-                        <th className="py-2.5 px-3">Slab Tier Range</th>
-                        <th className="py-2.5 px-3 text-center">Tax Rate</th>
-                        <th className="py-2.5 px-3">Statutory Description</th>
+                        <th className="py-2.5 px-3">{language === 'bn' ? 'করের ধাপ / সীমা' : 'Slab Tier Range'}</th>
+                        <th className="py-2.5 px-3 text-center">{language === 'bn' ? 'করের হার' : 'Tax Rate'}</th>
+                        <th className="py-2.5 px-3">{language === 'bn' ? 'সংবিধিবদ্ধ বিবরণ' : 'Statutory Description'}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 font-medium">
@@ -237,7 +242,7 @@ export const RulesPage = () => {
                                   : 'bg-amber-100 text-amber-900'
                               }`}
                             >
-                              {slab.rate}%
+                              {formatNumber(slab.rate)}%
                             </span>
                           </td>
                           <td className="py-3 px-3 text-slate-600 text-xs">
@@ -260,32 +265,36 @@ export const RulesPage = () => {
                     <PiggyBank className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900">Section 78 Rebates</h4>
-                    <span className="text-[11px] text-slate-400">Investment credits</span>
+                    <h4 className="text-sm font-bold text-slate-900">
+                      {language === 'bn' ? 'ধারা ৭৮ কর রেয়াত' : 'Section 78 Rebates'}
+                    </h4>
+                    <span className="text-[11px] text-slate-400">
+                      {language === 'bn' ? 'বিনিয়োগ রেয়াত সুবিধা' : 'Investment credits'}
+                    </span>
                   </div>
                 </div>
 
                 <div className="space-y-2.5 text-xs">
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
-                    <span className="text-slate-600">Rebate Rate:</span>
+                    <span className="text-slate-600">{language === 'bn' ? 'রেয়াতের হার:' : 'Rebate Rate:'}</span>
                     <span className="font-bold text-slate-900">
                       {currentRule.rebateRules.rateFormatted}
                     </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
-                    <span className="text-slate-600">Income Cap:</span>
+                    <span className="text-slate-600">{language === 'bn' ? 'আয়ের সর্বোচ্চ সীমা:' : 'Income Cap:'}</span>
                     <span className="font-bold text-slate-900">
                       {currentRule.rebateRules.incomeCeilingFormatted}
                     </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
-                    <span className="text-slate-600">Statutory Max:</span>
+                    <span className="text-slate-600">{language === 'bn' ? 'সর্বোচ্চ রেয়াত:' : 'Statutory Max:'}</span>
                     <span className="font-bold text-slate-900">
                       {currentRule.rebateRules.maxStatutoryCapFormatted}
                     </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
-                    <span className="text-slate-600">DPS Cap:</span>
+                    <span className="text-slate-600">{language === 'bn' ? 'ডিপিএস সীমা:' : 'DPS Cap:'}</span>
                     <span className="font-bold text-slate-900">
                       {currentRule.rebateRules.dpsAnnualCapFormatted}
                     </span>
@@ -300,8 +309,12 @@ export const RulesPage = () => {
                     <MapPin className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900">Section 73 Minimum Tax</h4>
-                    <span className="text-[11px] text-slate-400">Geographical zones</span>
+                    <h4 className="text-sm font-bold text-slate-900">
+                      {language === 'bn' ? 'ধারা ৭৩ ন্যূনতম কর' : 'Section 73 Minimum Tax'}
+                    </h4>
+                    <span className="text-[11px] text-slate-400">
+                      {language === 'bn' ? 'এলাকাভিত্তিক হার' : 'Geographical zones'}
+                    </span>
                   </div>
                 </div>
 
@@ -316,7 +329,7 @@ export const RulesPage = () => {
                         <span className="text-[10px] text-slate-500">{z.description}</span>
                       </div>
                       <span className="font-black text-slate-900 bg-white px-2 py-1 rounded-lg border border-slate-200 shrink-0 ml-2">
-                        {z.formatted}
+                        {formatMoney(z.amount)}
                       </span>
                     </div>
                   ))}
@@ -330,14 +343,18 @@ export const RulesPage = () => {
                     <Coins className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-slate-900">Net Wealth Surcharge</h4>
-                    <span className="text-[11px] text-slate-400">High net-worth tiers</span>
+                    <h4 className="text-sm font-bold text-slate-900">
+                      {language === 'bn' ? 'নিট পরিসম্পদ সারচার্জ' : 'Net Wealth Surcharge'}
+                    </h4>
+                    <span className="text-[11px] text-slate-400">
+                      {language === 'bn' ? 'উচ্চ সম্পদের স্তর' : 'High net-worth tiers'}
+                    </span>
                   </div>
                 </div>
 
                 <div className="space-y-2 text-xs">
                   <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-slate-600">
-                    Threshold: <strong className="text-slate-900">{currentRule.surchargeRules.wealthThresholdFormatted}</strong>
+                    {language === 'bn' ? 'প্রারম্ভিক সীমা:' : 'Threshold:'} <strong className="text-slate-900">{currentRule.surchargeRules.wealthThresholdFormatted}</strong>
                   </div>
                   {currentRule.surchargeRules.tiers.slice(1, 4).map((t, idx) => (
                     <div
@@ -345,7 +362,7 @@ export const RulesPage = () => {
                       className="p-2 bg-slate-50 rounded-xl border border-slate-200 flex justify-between"
                     >
                       <span className="text-slate-600 truncate">{t.tier}:</span>
-                      <span className="font-bold text-purple-700">{t.rate}%</span>
+                      <span className="font-bold text-purple-700">{formatNumber(t.rate)}%</span>
                     </div>
                   ))}
                 </div>
@@ -357,10 +374,10 @@ export const RulesPage = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-base font-bold text-slate-900">
-                    Official Regulatory Documents & Citations
+                    {language === 'bn' ? 'অফিশিয়াল আইনগত দলিল ও গেজেট সূত্র' : 'Official Regulatory Documents & Citations'}
                   </h3>
                   <p className="text-xs text-slate-500">
-                    Published government gazettes, acts, and statutory regulatory orders (SRO)
+                    {language === 'bn' ? 'সরকারি গেজেট, আইন ও সংবিধিবদ্ধ বিধিমালা (SRO)' : 'Published government gazettes, acts, and statutory regulatory orders (SRO)'}
                   </p>
                 </div>
               </div>
@@ -390,7 +407,7 @@ export const RulesPage = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 transition-colors"
                     >
-                      <ExternalLink className="w-3.5 h-3.5" /> View on NBR Portal
+                      <ExternalLink className="w-3.5 h-3.5" /> {language === 'bn' ? 'এনবিআর পোর্টালে দেখুন' : 'View on NBR Portal'}
                     </a>
                   </div>
                 ))}
@@ -409,10 +426,12 @@ export const RulesPage = () => {
         <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-3 shadow-xl">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-400">
             <ShieldCheck className="w-4 h-4" />
-            <span>Statutory Reference Notice</span>
+            <span>{language === 'bn' ? 'সংবিধিবদ্ধ সূত্র সংক্রান্ত নোটিশ' : 'Statutory Reference Notice'}</span>
           </div>
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl">
-            All rates, brackets, Section 78 allowable percentages, and thresholds are <strong>based on published information from the National Board of Revenue (NBR)</strong>. TaxBD is an independent educational platform and does not claim official government affiliation. Tax rules can change. Always verify your final tax liability using official NBR guidance or a qualified tax professional.
+            {language === 'bn'
+              ? 'এখানে প্রদর্শিত সকল করহার, করের ধাপ, ধারা ৭৮ অনুযায়ী অনুমোদনযোগ্য শতকরা হার এবং করমুক্ত সীমা জাতীয় রাজস্ব বোর্ড (NBR)-এর প্রকাশিত অফিশিয়াল তথ্যের ওপর ভিত্তি করে তৈরি। ট্যাক্সবিডি একটি স্বতন্ত্র শিক্ষামূলক প্ল্যাটফর্ম এবং কোনো সরকারি কর্তৃপক্ষ নয়। কর বিধিমালা পরিবর্তনযোগ্য। চূড়ান্ত করদায় নির্ধারণে সর্বদা এনবিআর-এর অফিশিয়াল নির্দেশনা অথবা অনুমোদিত আয়কর পেশাজীবীর পরামর্শ নিন।'
+              : 'All rates, brackets, Section 78 allowable percentages, and thresholds are based on published information from the National Board of Revenue (NBR). TaxBD is an independent educational platform and does not claim official government affiliation. Tax rules can change. Always verify your final tax liability using official NBR guidance or a qualified tax professional.'}
           </p>
         </div>
       </div>

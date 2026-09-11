@@ -1,17 +1,13 @@
 import React from 'react';
 import {
-  CheckCircle2,
   Calendar,
   User,
   MapPin,
-  Briefcase,
-  PiggyBank,
   ArrowRight,
   Edit2,
   Sparkles,
-  ShieldAlert,
 } from 'lucide-react';
-import { formatBDT } from '../../utils/formatters';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const StepReview = ({
   assessmentYear,
@@ -25,19 +21,27 @@ export const StepReview = ({
   onCalculate,
   loading,
 }) => {
+  const { t, isBengali, formatMoney, formatNumber } = useLanguage();
+
   const categoryLabels = {
-    general: 'Individual (Male)',
-    female: 'Female Taxpayer',
-    seniorCitizen: 'Senior Citizen (65+)',
-    thirdGender: 'Third Gender Taxpayer',
-    disabled: 'Person with Disability',
-    freedomFighter: 'Gazetted Freedom Fighter',
+    general: isBengali ? 'সাধারণ করদাতা (পুরুষ)' : 'Individual (Male)',
+    female: isBengali ? 'মহিলা করদাতা' : 'Female Taxpayer',
+    seniorCitizen: isBengali ? 'প্রবীণ নাগরিক (৬৫+ বছর)' : 'Senior Citizen (65+)',
+    thirdGender: isBengali ? 'তৃতীয় লিঙ্গের করদাতা' : 'Third Gender Taxpayer',
+    disabled: isBengali ? 'প্রতিবন্ধী ব্যক্তি করদাতা' : 'Person with Disability',
+    freedomFighter: isBengali ? 'গেজেটভুক্ত যুদ্ধাহত বীর মুক্তিযোদ্ধা' : 'Gazetted Freedom Fighter',
   };
 
   const zoneLabels = {
-    dhaka_chattogram: 'Dhaka & Chattogram City Corp (Min Tax ৳5,000)',
-    other_city_corporation: 'Other City Corp (Min Tax ৳4,000)',
-    non_city_corporation: 'Municipalities / Rural (Min Tax ৳3,000)',
+    dhaka_chattogram: isBengali
+      ? 'ঢাকা ও চট্টগ্রাম সিটি কর্পোরেশন (ন্যূনতম কর ৫,০০০ টাকা)'
+      : 'Dhaka & Chattogram City Corp (Min Tax ৳5,000)',
+    other_city_corporation: isBengali
+      ? 'অন্যান্য সিটি কর্পোরেশন এলাকা (ন্যূনতম কর ৪,০০০ টাকা)'
+      : 'Other City Corp (Min Tax ৳4,000)',
+    non_city_corporation: isBengali
+      ? 'পৌরসভা / উপজেলা / পল্লী এলাকা (ন্যূনতম কর ৩,০০০ টাকা)'
+      : 'Municipalities / Rural (Min Tax ৳3,000)',
   };
 
   const totalGrossIncome =
@@ -66,10 +70,10 @@ export const StepReview = ({
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="text-center space-y-2">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Review Your Information
+          {t('calculator.step5.heading')}
         </h2>
         <p className="text-sm sm:text-base text-slate-600">
-          Please review your details before calculating. You can edit any section by clicking on it.
+          {t('calculator.step5.subheading')}
         </p>
       </div>
 
@@ -79,14 +83,14 @@ export const StepReview = ({
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                1. Assessment Year & Taxpayer Profile
+                {t('calculator.step5.taxpayerProfile')}
               </span>
               <button
                 type="button"
                 onClick={() => onEditStep(1)}
                 className="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1"
               >
-                <Edit2 className="w-3.5 h-3.5" /> Edit
+                <Edit2 className="w-3.5 h-3.5" /> {isBengali ? 'পরিবর্তন' : 'Edit'}
               </button>
             </div>
 
@@ -94,7 +98,7 @@ export const StepReview = ({
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-500 flex items-center gap-2">
                   <Calendar className="w-4 h-4 text-slate-400" />
-                  Assessment Year:
+                  {isBengali ? 'করবর্ষ:' : 'Assessment Year:'}
                 </span>
                 <span className="font-bold text-slate-900">{assessmentYear}</span>
               </div>
@@ -102,24 +106,26 @@ export const StepReview = ({
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-500 flex items-center gap-2">
                   <User className="w-4 h-4 text-slate-400" />
-                  Category:
+                  {isBengali ? 'করদাতার শ্রেণী:' : 'Category:'}
                 </span>
-                <span className="font-bold text-slate-900">
+                <span className="font-bold text-slate-900 text-right">
                   {categoryLabels[category] || category}
                 </span>
               </div>
 
               {age > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Age:</span>
-                  <span className="font-bold text-slate-900">{age} years</span>
+                  <span className="text-slate-500">{isBengali ? 'বয়স:' : 'Age:'}</span>
+                  <span className="font-bold text-slate-900">
+                    {formatNumber(age)} {isBengali ? 'বছর' : 'years'}
+                  </span>
                 </div>
               )}
 
               <div className="flex items-center justify-between text-sm">
                 <span className="text-slate-500 flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-slate-400" />
-                  Location:
+                  {isBengali ? 'বসবাসের এলাকা:' : 'Location:'}
                 </span>
                 <span className="font-bold text-slate-900 text-right text-xs sm:text-sm">
                   {zoneLabels[zone] || zone}
@@ -128,9 +134,11 @@ export const StepReview = ({
 
               {disabledChildrenCount > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Disabled Children:</span>
+                  <span className="text-slate-500">
+                    {isBengali ? 'প্রতিবন্ধী সন্তান:' : 'Disabled Children:'}
+                  </span>
                   <span className="font-bold text-purple-700">
-                    {disabledChildrenCount} (+{formatBDT(disabledChildrenCount * 50000)} Exemption)
+                    {formatNumber(disabledChildrenCount)} (+{formatMoney(disabledChildrenCount * 50000)} {isBengali ? 'করমুক্ত সুবিধা' : 'Exemption'})
                   </span>
                 </div>
               )}
@@ -143,70 +151,70 @@ export const StepReview = ({
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                2. Annual Gross Income
+                {t('calculator.step5.incomeSummary')}
               </span>
               <button
                 type="button"
                 onClick={() => onEditStep(3)}
                 className="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1"
               >
-                <Edit2 className="w-3.5 h-3.5" /> Edit
+                <Edit2 className="w-3.5 h-3.5" /> {isBengali ? 'পরিবর্তন' : 'Edit'}
               </button>
             </div>
 
             <div className="mt-4 space-y-2.5">
               {Number(inputs.salaryIncome || 0) > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Salary & Employment:</span>
-                  <span className="font-bold text-slate-900">{formatBDT(inputs.salaryIncome)}</span>
+                  <span className="text-slate-500">{isBengali ? 'বেতন ও চাকরি:' : 'Salary & Employment:'}</span>
+                  <span className="font-bold text-slate-900">{formatMoney(inputs.salaryIncome)}</span>
                 </div>
               )}
               {Number(inputs.housePropertyIncome || 0) > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">House Property:</span>
+                  <span className="text-slate-500">{isBengali ? 'গৃহ-সম্পত্তি:' : 'House Property:'}</span>
                   <span className="font-bold text-slate-900">
-                    {formatBDT(inputs.housePropertyIncome)}
+                    {formatMoney(inputs.housePropertyIncome)}
                   </span>
                 </div>
               )}
               {Number(inputs.businessIncome || 0) > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Business & Profession:</span>
-                  <span className="font-bold text-slate-900">{formatBDT(inputs.businessIncome)}</span>
+                  <span className="text-slate-500">{isBengali ? 'ব্যবসা ও পেশা:' : 'Business & Profession:'}</span>
+                  <span className="font-bold text-slate-900">{formatMoney(inputs.businessIncome)}</span>
                 </div>
               )}
               {Number(inputs.agricultureIncome || 0) > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Agriculture:</span>
+                  <span className="text-slate-500">{isBengali ? 'কৃষি:' : 'Agriculture:'}</span>
                   <span className="font-bold text-slate-900">
-                    {formatBDT(inputs.agricultureIncome)}
+                    {formatMoney(inputs.agricultureIncome)}
                   </span>
                 </div>
               )}
               {Number(inputs.capitalGains || 0) > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Capital Gains:</span>
-                  <span className="font-bold text-slate-900">{formatBDT(inputs.capitalGains)}</span>
+                  <span className="text-slate-500">{isBengali ? 'মূলধনী লাভ:' : 'Capital Gains:'}</span>
+                  <span className="font-bold text-slate-900">{formatMoney(inputs.capitalGains)}</span>
                 </div>
               )}
               {Number(inputs.financialAssets || 0) > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Financial Assets:</span>
+                  <span className="text-slate-500">{isBengali ? 'আর্থিক পরিসম্পদ:' : 'Financial Assets:'}</span>
                   <span className="font-bold text-slate-900">
-                    {formatBDT(inputs.financialAssets)}
+                    {formatMoney(inputs.financialAssets)}
                   </span>
                 </div>
               )}
               {Number(inputs.otherIncome || 0) > 0 && (
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-slate-500">Other Sources:</span>
-                  <span className="font-bold text-slate-900">{formatBDT(inputs.otherIncome)}</span>
+                  <span className="text-slate-500">{isBengali ? 'অন্যান্য উৎস:' : 'Other Sources:'}</span>
+                  <span className="font-bold text-slate-900">{formatMoney(inputs.otherIncome)}</span>
                 </div>
               )}
 
               <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-base font-extrabold text-emerald-700">
-                <span>Total Gross Income:</span>
-                <span>{formatBDT(totalGrossIncome)}</span>
+                <span>{isBengali ? 'মোট বার্ষিক আয়:' : 'Total Gross Income:'}</span>
+                <span>{formatMoney(totalGrossIncome)}</span>
               </div>
             </div>
           </div>
@@ -217,27 +225,31 @@ export const StepReview = ({
       <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            3. Deductions & Section 78 Rebates
+            {t('calculator.step5.deductionsSummary')}
           </span>
           <button
             type="button"
             onClick={() => onEditStep(4)}
             className="text-xs font-semibold text-brand-600 hover:text-brand-700 flex items-center gap-1"
           >
-            <Edit2 className="w-3.5 h-3.5" /> Edit
+            <Edit2 className="w-3.5 h-3.5" /> {isBengali ? 'পরিবর্তন' : 'Edit'}
           </button>
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="text-sm font-semibold text-slate-700">
-              Total Eligible Investments Claimed:
+              {isBengali
+                ? 'মোট দাবিকৃত কর রেয়াতযোগ্য বিনিয়োগ:'
+                : 'Total Eligible Investments Claimed:'}
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Subject to Section 78 statutory cap (20% of taxable income or ৳10 Lakh).
+              {isBengali
+                ? 'আয়কর আইনের ধারা ৭৮ অনুযায়ী অনুমোদিত বিনিয়োগের ওপর ১৫% কর রেয়াত সমন্বিত হবে।'
+                : 'Subject to Section 78 statutory cap (20% of taxable income or ৳10 Lakh).'}
             </p>
           </div>
-          <div className="text-xl font-bold text-indigo-700">{formatBDT(totalInvestments)}</div>
+          <div className="text-xl font-bold text-indigo-700">{formatMoney(totalInvestments)}</div>
         </div>
       </div>
 
@@ -245,10 +257,14 @@ export const StepReview = ({
       <div className="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-6 sm:p-8 text-white shadow-xl text-center space-y-4">
         <div className="max-w-xl mx-auto space-y-2">
           <h3 className="text-xl sm:text-2xl font-black tracking-tight">
-            Ready to compute your tax liability?
+            {isBengali
+              ? 'আপনার কর বিবরণী প্রস্তুত করতে প্রস্তুত?'
+              : 'Ready to compute your tax liability?'}
           </h3>
           <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
-            Your calculation will be processed through our official Bangladesh NBR calculation engine according to the Finance Act rules.
+            {isBengali
+              ? 'অর্থ আইনের সরকারি বিধিমালার আলোকে আমাদের স্বয়ংক্রিয় প্রগতিশীল ইঞ্জিন নির্ভুলভাবে প্রতিটি ধাপ হিসাব করবে।'
+              : 'Your calculation will be processed through our official Bangladesh NBR calculation engine according to the Finance Act rules.'}
           </p>
         </div>
 
@@ -261,12 +277,12 @@ export const StepReview = ({
           {loading ? (
             <>
               <div className="w-5 h-5 border-2 border-emerald-800 border-t-transparent rounded-full animate-spin" />
-              Calculating Tax...
+              {t('common.loading', 'Calculating Tax...')}
             </>
           ) : (
             <>
               <Sparkles className="w-5 h-5 text-emerald-600" />
-              Calculate My Tax
+              {t('calculator.step5.calculateButton', 'Calculate My Tax')}
               <ArrowRight className="w-5 h-5 text-emerald-700" />
             </>
           )}

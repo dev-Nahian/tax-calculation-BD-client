@@ -5,8 +5,10 @@ import gsap from 'gsap';
 import Button from '../common/Button';
 import Badge from '../common/Badge';
 import VisualFlow from './VisualFlow';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const Hero = () => {
+  const { t, language } = useLanguage();
   const heroRef = useRef(null);
   const headlineRef = useRef(null);
   const subtextRef = useRef(null);
@@ -55,7 +57,7 @@ export const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 mb-6">
             <Badge variant="emerald" size="md" icon={ShieldCheck} className="shadow-subtle">
-              Updated for Assessment Year 2024-2025 (Act 2023)
+              {t('home.heroBadge')}
             </Badge>
           </div>
 
@@ -64,9 +66,9 @@ export const Hero = () => {
             ref={headlineRef}
             className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.12] mb-6 text-balance"
           >
-            Know Your Bangladesh{' '}
+            {t('home.heroTitlePrefix')}{' '}
             <span className="text-brand-900 bg-gradient-to-r from-brand-900 via-emerald-800 to-teal-900 bg-clip-text text-transparent">
-              Income Tax.
+              {t('home.heroTitleHighlight')}.
             </span>
           </h1>
 
@@ -75,7 +77,7 @@ export const Hero = () => {
             ref={subtextRef}
             className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8 text-balance font-normal"
           >
-            Estimate your income tax, understand the calculation, and learn which rules apply to you.
+            {t('home.heroSubtitle')}
           </p>
 
           {/* Action CTAs */}
@@ -91,11 +93,11 @@ export const Hero = () => {
                 iconPosition="right"
                 className="w-full sm:w-auto shadow-md hover:shadow-lg font-semibold"
               >
-                Calculate My Tax
+                {t('home.calcButton')}
               </Button>
             </Link>
 
-            <Link to="/guide" className="w-full sm:w-auto">
+            <Link to="/tax-guide" className="w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
@@ -103,7 +105,7 @@ export const Hero = () => {
                 iconPosition="left"
                 className="w-full sm:w-auto font-medium"
               >
-                Learn How Tax Works
+                {language === 'bn' ? 'আয়কর নির্দেশিকা জানুন' : 'Learn How Tax Works'}
               </Button>
             </Link>
           </div>
@@ -112,15 +114,15 @@ export const Hero = () => {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-medium text-slate-500">
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>100% Free & Open</span>
+              <span>{language === 'bn' ? '১০০% উন্মুক্ত ও ফ্রি' : '100% Free & Open'}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>No Sign-Up Required</span>
+              <span>{language === 'bn' ? 'কোনো সাইন-আপ প্রয়োজন নেই' : 'No Sign-Up Required'}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Accurate Slabs & Rebates</span>
+              <span>{language === 'bn' ? 'নির্ভুল কর ধাপ ও রেয়াত' : 'Accurate Slabs & Rebates'}</span>
             </div>
           </div>
         </div>

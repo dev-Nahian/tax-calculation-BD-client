@@ -14,9 +14,10 @@ import {
   Calendar,
 } from 'lucide-react';
 import { RULES_BY_YEAR } from '../../constants/rulesData';
-import { formatBDT } from '../../utils/formatters';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const RulesComparison = () => {
+  const { t, formatMoney, formatNumber, language } = useLanguage();
   const availableYears = Object.keys(RULES_BY_YEAR);
   const [yearA, setYearA] = useState('2023-2024');
   const [yearB, setYearB] = useState('2024-2025');
@@ -30,13 +31,15 @@ export const RulesComparison = () => {
       <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
           <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-            Comparative Tax Audit
+            {language === 'bn' ? 'তুলনামূলক কর নিরীক্ষা' : 'Comparative Tax Audit'}
           </span>
           <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-2 tracking-tight">
-            Compare Assessment Years
+            {language === 'bn' ? 'দুই করবর্ষের কর বিধিমালার তুলনা' : 'Compare Assessment Years'}
           </h2>
           <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Evaluate changes in exemption limits, slab bracket widths, minimum taxes, and surcharge rules.
+            {language === 'bn'
+              ? 'করমুক্ত সীমা, কর ধাপের ব্যাপ্তি, ন্যূনতম কর এবং সারচার্জ বিধিমালার পরিবর্তন পর্যালোচনা করুন।'
+              : 'Evaluate changes in exemption limits, slab bracket widths, minimum taxes, and surcharge rules.'}
           </p>
         </div>
 
@@ -44,7 +47,7 @@ export const RulesComparison = () => {
           {/* Year A Selector */}
           <div className="flex-1 md:w-44">
             <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-              Baseline Year (A)
+              {language === 'bn' ? 'ভিত্তি করবর্ষ (A)' : 'Baseline Year (A)'}
             </label>
             <select
               value={yearA}
@@ -53,7 +56,7 @@ export const RulesComparison = () => {
             >
               {availableYears.map((yr) => (
                 <option key={yr} value={yr}>
-                  AY {yr}
+                  {language === 'bn' ? `করবর্ষ ${yr}` : `AY ${yr}`}
                 </option>
               ))}
             </select>
@@ -66,7 +69,7 @@ export const RulesComparison = () => {
           {/* Year B Selector */}
           <div className="flex-1 md:w-44">
             <label className="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">
-              Comparison Year (B)
+              {language === 'bn' ? 'তুলনাকৃত করবর্ষ (B)' : 'Comparison Year (B)'}
             </label>
             <select
               value={yearB}
@@ -75,7 +78,7 @@ export const RulesComparison = () => {
             >
               {availableYears.map((yr) => (
                 <option key={yr} value={yr}>
-                  AY {yr}
+                  {language === 'bn' ? `করবর্ষ ${yr}` : `AY ${yr}`}
                 </option>
               ))}
             </select>
@@ -93,10 +96,10 @@ export const RulesComparison = () => {
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                1. Statutory Exemption Thresholds Comparison
+                {language === 'bn' ? '১. করমুক্ত সীমার তুলনামূলক বিবরণ' : '1. Statutory Exemption Thresholds Comparison'}
               </h3>
               <p className="text-xs text-slate-500">
-                Tax-free allowance limits across taxpayer categories
+                {language === 'bn' ? 'বিভিন্ন শ্রেণির করদাতার করমুক্ত আয়ের সীমার পরিবর্তন' : 'Tax-free allowance limits across taxpayer categories'}
               </p>
             </div>
           </div>
@@ -105,10 +108,10 @@ export const RulesComparison = () => {
             <table className="w-full text-left text-xs sm:text-sm">
               <thead>
                 <tr className="bg-slate-100/60 border-b border-slate-200 text-slate-600 font-bold text-[11px] uppercase tracking-wider">
-                  <th className="py-3 px-4">Taxpayer Category</th>
-                  <th className="py-3 px-4 text-right">AY {yearA}</th>
-                  <th className="py-3 px-4 text-right">AY {yearB}</th>
-                  <th className="py-3 px-4 text-center">Status / Variance</th>
+                  <th className="py-3 px-4">{language === 'bn' ? 'করদাতার শ্রেণি' : 'Taxpayer Category'}</th>
+                  <th className="py-3 px-4 text-right">{language === 'bn' ? `করবর্ষ ${yearA}` : `AY ${yearA}`}</th>
+                  <th className="py-3 px-4 text-right">{language === 'bn' ? `করবর্ষ ${yearB}` : `AY ${yearB}`}</th>
+                  <th className="py-3 px-4 text-center">{language === 'bn' ? 'পরিবর্তন / অবস্থা' : 'Status / Variance'}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium">
@@ -130,19 +133,19 @@ export const RulesComparison = () => {
                         {catB.category}
                       </td>
                       <td className="py-3.5 px-4 text-right font-semibold text-slate-600">
-                        {catA ? catA.formatted : 'N/A'}
+                        {catA ? formatMoney(catA.limit) : 'N/A'}
                       </td>
                       <td className="py-3.5 px-4 text-right font-bold text-slate-900">
-                        {catB.formatted}
+                        {formatMoney(catB.limit)}
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         {isChanged ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                            +{formatBDT(diff)} Increased
+                            +{formatMoney(diff)} {language === 'bn' ? 'বৃদ্ধি পেয়েছে' : 'Increased'}
                           </span>
                         ) : (
                           <span className="text-slate-400 font-semibold text-xs">
-                            Unchanged
+                            {language === 'bn' ? 'অপরিবর্তিত' : 'Unchanged'}
                           </span>
                         )}
                       </td>
@@ -162,10 +165,10 @@ export const RulesComparison = () => {
             </div>
             <div>
               <h3 className="text-base font-bold text-slate-900">
-                2. Progressive Tax Slabs & Bracket Widths
+                {language === 'bn' ? '২. প্রগতিশীল কর ধাপ ও করহারের তুলনা' : '2. Progressive Tax Slabs & Bracket Widths'}
               </h3>
               <p className="text-xs text-slate-500">
-                Progressive rates and taxable tier limits
+                {language === 'bn' ? 'প্রগতিশীল করহার এবং করযোগ্য আয়ের স্তর' : 'Progressive rates and taxable tier limits'}
               </p>
             </div>
           </div>
@@ -175,7 +178,7 @@ export const RulesComparison = () => {
             <div className="p-5 sm:p-6 space-y-3">
               <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                 <span className="font-extrabold text-sm text-slate-800">
-                  Assessment Year {yearA} Slabs
+                  {language === 'bn' ? `করবর্ষ ${yearA} এর কর ধাপ` : `Assessment Year ${yearA} Slabs`}
                 </span>
                 <span className="text-xs text-slate-500 font-semibold">{dataA.act}</span>
               </div>
@@ -187,7 +190,7 @@ export const RulesComparison = () => {
                   >
                     <span className="font-semibold text-slate-800">{s.range}</span>
                     <span className="font-extrabold text-slate-900 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
-                      {s.rate}%
+                      {formatNumber(s.rate)}%
                     </span>
                   </div>
                 ))}
@@ -198,7 +201,7 @@ export const RulesComparison = () => {
             <div className="p-5 sm:p-6 space-y-3 bg-slate-50/30">
               <div className="flex items-center justify-between pb-2 border-b border-slate-200">
                 <span className="font-extrabold text-sm text-slate-800">
-                  Assessment Year {yearB} Slabs
+                  {language === 'bn' ? `করবর্ষ ${yearB} এর কর ধাপ` : `Assessment Year ${yearB} Slabs`}
                 </span>
                 <span className="text-xs text-emerald-700 font-semibold">{dataB.act}</span>
               </div>
@@ -210,7 +213,7 @@ export const RulesComparison = () => {
                   >
                     <span className="font-semibold text-slate-800">{s.range}</span>
                     <span className="font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
-                      {s.rate}%
+                      {formatNumber(s.rate)}%
                     </span>
                   </div>
                 ))}
@@ -229,36 +232,38 @@ export const RulesComparison = () => {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-slate-900">
-                  Section 78 Investment Rebate Rules
+                  {language === 'bn' ? 'ধারা ৭৮ বিনিয়োগ কর রেয়াত' : 'Section 78 Investment Rebate Rules'}
                 </h4>
-                <span className="text-[11px] text-slate-400">Statutory caps & rates</span>
+                <span className="text-[11px] text-slate-400">
+                  {language === 'bn' ? 'সর্বোচ্চ সীমা ও শতকরা হার' : 'Statutory caps & rates'}
+                </span>
               </div>
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm">
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-600">Rebate Percentage:</span>
+                <span className="text-slate-600">{language === 'bn' ? 'রেয়াতের শতকরা হার:' : 'Rebate Percentage:'}</span>
                 <span className="font-bold text-slate-900">
-                  AY {yearA}: {dataA.rebateRules.rateFormatted} | AY {yearB}: {dataB.rebateRules.rateFormatted}
+                  {language === 'bn' ? `করবর্ষ ${yearA}: ${dataA.rebateRules.rateFormatted} | করবর্ষ ${yearB}: ${dataB.rebateRules.rateFormatted}` : `AY ${yearA}: ${dataA.rebateRules.rateFormatted} | AY ${yearB}: ${dataB.rebateRules.rateFormatted}`}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-600">Taxable Income Cap:</span>
+                <span className="text-slate-600">{language === 'bn' ? 'করযোগ্য আয়ের সর্বোচ্চ সীমা:' : 'Taxable Income Cap:'}</span>
                 <span className="font-bold text-slate-900">
                   {dataB.rebateRules.incomeCeilingFormatted}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-600">Max Statutory Cap:</span>
+                <span className="text-slate-600">{language === 'bn' ? 'আইনগত সর্বোচ্চ সীমা:' : 'Max Statutory Cap:'}</span>
                 <span className="font-bold text-slate-900">
                   {dataB.rebateRules.maxStatutoryCapFormatted}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
-                <span className="text-slate-600">DPS Annual Limit:</span>
+                <span className="text-slate-600">{language === 'bn' ? 'ডিপিএস বার্ষিক সীমা:' : 'DPS Annual Limit:'}</span>
                 <span className="font-bold text-slate-900">
                   {dataB.rebateRules.dpsAnnualCapFormatted}
                 </span>
@@ -274,9 +279,11 @@ export const RulesComparison = () => {
               </div>
               <div>
                 <h4 className="text-sm font-bold text-slate-900">
-                  Geographical Minimum Tax (Sec 73)
+                  {language === 'bn' ? 'এলাকাভিত্তিক ন্যূনতম কর (ধারা ৭৩)' : 'Geographical Minimum Tax (Sec 73)'}
                 </h4>
-                <span className="text-[11px] text-slate-400">Zone requirements</span>
+                <span className="text-[11px] text-slate-400">
+                  {language === 'bn' ? 'এলাকাভিত্তিক বাধ্যবাধকতা' : 'Zone requirements'}
+                </span>
               </div>
             </div>
 
@@ -293,7 +300,7 @@ export const RulesComparison = () => {
                       <span className="text-[11px] text-slate-500">{zB.description}</span>
                     </div>
                     <span className="font-black text-slate-900 shrink-0 ml-2">
-                      {zB.formatted}
+                      {formatMoney(zB.amount)}
                     </span>
                   </div>
                 );

@@ -3,11 +3,8 @@ import { Link } from 'react-router-dom';
 import {
   BookOpen,
   Search,
-  Filter,
   Sparkles,
-  ArrowRight,
   ShieldCheck,
-  CheckCircle2,
   HelpCircle,
   Calculator,
   Layers,
@@ -17,14 +14,11 @@ import {
   FileText,
   Laptop,
   Users,
-  Building2,
   Calendar,
   ChevronRight,
-  Info,
-  ExternalLink,
 } from 'lucide-react';
 import PageHero from '../components/common/PageHero';
-import Badge from '../components/common/Badge';
+import { useLanguage } from '../context/LanguageContext';
 import {
   GUIDE_CATEGORIES,
   GUIDE_ARTICLES,
@@ -35,7 +29,7 @@ export const TaxGuidePage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedAY, setSelectedAY] = useState('2024-2025');
-  const [isBeginnerMode, setIsBeginnerMode] = useState(true);
+  const { t, isBengali, formatNumber } = useLanguage();
 
   // Icon mapping
   const iconMap = {
@@ -88,10 +82,10 @@ export const TaxGuidePage = () => {
     <div className="pb-20">
       {/* Hero Header */}
       <PageHero
-        badge="Tax Education Hub"
+        badge={isBengali ? 'আয়কর শিক্ষা কেন্দ্র' : 'Tax Education Hub'}
         badgeIcon={BookOpen}
-        title="Bangladesh Income Tax Guide"
-        subtitle="Demystifying Bangladesh tax laws with plain-language guides, interactive examples, and official statutory references."
+        title={t('guide.title')}
+        subtitle={t('guide.subtitle')}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 space-y-12">
@@ -105,7 +99,11 @@ export const TaxGuidePage = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search any tax topic, slab, rebate, or definition (e.g., 'tax slab', 'DPS', 'e-Return')..."
+                placeholder={
+                  isBengali
+                    ? "আয়কর বিষয়, কর ধাপ, রেয়াত বা পরিভাষা খুঁজুন (যেমন 'কর ধাপ', 'ডিপিএস', 'ই-রিটার্ন')..."
+                    : "Search any tax topic, slab, rebate, or definition (e.g., 'tax slab', 'DPS', 'e-Return')..."
+                }
                 className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 font-medium text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all"
               />
               {searchQuery && (
@@ -114,7 +112,7 @@ export const TaxGuidePage = () => {
                   onClick={() => setSearchQuery('')}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-slate-400 hover:text-slate-600 p-1"
                 >
-                  Clear
+                  {isBengali ? 'মুছুন' : 'Clear'}
                 </button>
               )}
             </div>
@@ -124,7 +122,7 @@ export const TaxGuidePage = () => {
               <div className="flex items-center gap-2">
                 <Calendar className="w-4 h-4 text-slate-400" />
                 <span className="text-xs font-bold text-slate-600 uppercase tracking-wider">
-                  AY Filter:
+                  {isBengali ? 'করবর্ষ:' : 'AY Filter:'}
                 </span>
               </div>
               <select
@@ -132,10 +130,10 @@ export const TaxGuidePage = () => {
                 onChange={(e) => setSelectedAY(e.target.value)}
                 className="bg-slate-50 border border-slate-200 text-slate-900 text-xs sm:text-sm rounded-xl px-3 py-2.5 font-bold focus:ring-2 focus:ring-emerald-500 focus:outline-none"
               >
-                <option value="all">All Assessment Years</option>
-                <option value="2024-2025">AY 2024-2025 (Current)</option>
-                <option value="2025-2026">AY 2025-2026 (Provisional)</option>
-                <option value="2023-2024">AY 2023-2024 (Historical)</option>
+                <option value="all">{isBengali ? 'সকল করবর্ষ' : 'All Assessment Years'}</option>
+                <option value="2024-2025">{isBengali ? 'করবর্ষ ২০২৪-২০২৫ (চলতি)' : 'AY 2024-2025 (Current)'}</option>
+                <option value="2025-2026">{isBengali ? 'করবর্ষ ২০২৫-২০২৬ (আসন্ন)' : 'AY 2025-2026 (Provisional)'}</option>
+                <option value="2023-2024">{isBengali ? 'করবর্ষ ২০২৩-২০২৪ (বিগত)' : 'AY 2023-2024 (Historical)'}</option>
               </select>
             </div>
           </div>
@@ -144,10 +142,12 @@ export const TaxGuidePage = () => {
           <div className="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center gap-2 text-xs font-bold text-emerald-800">
               <Sparkles className="w-4 h-4 text-emerald-600" />
-              <span>"Explain Like I'm New to Tax" Mode Active</span>
+              <span>{t('guide.plainLanguageMode')}</span>
             </div>
             <p className="text-xs text-slate-500">
-              Uses <strong>Question → Simple answer → Example</strong> structure rather than dense legal paragraphs.
+              {isBengali
+                ? 'জটিল আইনগত ধারার পরিবর্তে প্রশ্ন → সহজ উত্তর → বাস্তব উদাহরণ কাঠামো ব্যবহার করা হয়েছে।'
+                : 'Uses Question → Simple answer → Example structure rather than dense legal paragraphs.'}
             </p>
           </div>
         </div>
@@ -156,7 +156,7 @@ export const TaxGuidePage = () => {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-              Explore 10 Tax Categories
+              {t('guide.categoriesHeading', 'Explore 10 Tax Categories')}
             </h2>
             {selectedCategory !== 'all' && (
               <button
@@ -164,7 +164,7 @@ export const TaxGuidePage = () => {
                 onClick={() => setSelectedCategory('all')}
                 className="text-xs font-bold text-brand-600 hover:text-brand-700"
               >
-                View all categories
+                {isBengali ? 'সকল ক্যাটাগরি দেখুন' : 'View all categories'}
               </button>
             )}
           </div>
@@ -200,10 +200,10 @@ export const TaxGuidePage = () => {
                   </div>
                   <div className="mt-3">
                     <h3 className="font-bold text-slate-900 text-xs sm:text-sm leading-snug">
-                      {cat.title}
+                      {isBengali && cat.titleBn ? cat.titleBn : cat.title}
                     </h3>
                     <span className="text-[11px] font-semibold text-slate-400 mt-1 block">
-                      {cat.count} articles
+                      {formatNumber(cat.count)} {isBengali ? 'টি গাইড' : 'articles'}
                     </span>
                   </div>
                 </button>
@@ -216,7 +216,7 @@ export const TaxGuidePage = () => {
         <div>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-              Educational Guides & Explainers ({filteredArticles.length})
+              {isBengali ? 'শিক্ষামূলক গাইড ও ব্যাখ্যা' : 'Educational Guides & Explainers'} ({formatNumber(filteredArticles.length)})
             </h2>
           </div>
 
@@ -224,10 +224,12 @@ export const TaxGuidePage = () => {
             <div className="bg-white rounded-3xl p-12 text-center border border-slate-200 space-y-3">
               <HelpCircle className="w-10 h-10 text-slate-300 mx-auto" />
               <h3 className="text-base font-bold text-slate-800">
-                No articles matched your filter
+                {isBengali ? 'কোনো গাইড পাওয়া যায়নি' : 'No articles matched your filter'}
               </h3>
               <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                Try searching for different keywords or resetting your category and assessment year filters.
+                {isBengali
+                  ? 'অন্য কোনো কীওয়ার্ড লিখে খুঁজুন অথবা ক্যাটাগরি ও করবর্ষ ফিল্টার রিসেট করুন।'
+                  : 'Try searching for different keywords or resetting your category and assessment year filters.'}
               </p>
               <button
                 type="button"
@@ -238,7 +240,7 @@ export const TaxGuidePage = () => {
                 }}
                 className="px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-xl text-xs font-bold text-slate-700 transition-colors"
               >
-                Reset all filters
+                {isBengali ? 'ফিল্টার রিসেট করুন' : 'Reset all filters'}
               </button>
             </div>
           ) : (
@@ -257,39 +259,39 @@ export const TaxGuidePage = () => {
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
                         <span className="px-2.5 py-1 text-[11px] font-extrabold bg-slate-100 text-slate-700 rounded-full border border-slate-200">
-                          {categoryObj?.title || 'Tax Guide'}
+                          {isBengali && categoryObj?.titleBn ? categoryObj.titleBn : (categoryObj?.title || 'Tax Guide')}
                         </span>
                         <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                          AY {article.assessmentYear}
+                          {isBengali ? `করবর্ষ ${article.assessmentYear}` : `AY ${article.assessmentYear}`}
                         </span>
                       </div>
 
                       <h3 className="text-base sm:text-lg font-black text-slate-900 group-hover:text-emerald-700 transition-colors leading-snug">
-                        {article.title}
+                        {isBengali && article.titleBn ? article.titleBn : article.title}
                       </h3>
 
                       <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                        {article.shortExplanation}
+                        {isBengali && article.shortExplanationBn ? article.shortExplanationBn : article.shortExplanation}
                       </p>
 
                       {/* Question Sneak Peek in Beginner Mode */}
                       <div className="p-3 bg-emerald-50/50 rounded-xl border border-emerald-200/60 text-xs space-y-1">
                         <div className="font-bold text-emerald-900 flex items-center gap-1.5">
                           <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
-                          <span>{article.simpleQuestion}</span>
+                          <span>{isBengali && article.simpleQuestionBn ? article.simpleQuestionBn : article.simpleQuestion}</span>
                         </div>
                         <p className="text-emerald-800/90 text-[11px] line-clamp-2">
-                          {article.simpleAnswer}
+                          {isBengali && article.simpleAnswerBn ? article.simpleAnswerBn : article.simpleAnswer}
                         </p>
                       </div>
                     </div>
 
                     <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                       <span className="text-slate-400 font-medium">
-                        Verified: {article.lastVerified}
+                        {isBengali ? `যাচাইকৃত: ${article.lastVerified}` : `Verified: ${article.lastVerified}`}
                       </span>
                       <span className="font-bold text-emerald-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                        Read full guide <ChevronRight className="w-4 h-4" />
+                        {t('guide.viewArticle', 'Read full guide')} <ChevronRight className="w-4 h-4" />
                       </span>
                     </div>
                   </Link>
@@ -304,13 +306,15 @@ export const TaxGuidePage = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-5">
             <div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                Official Definitions
+                {isBengali ? 'সংবিধিবদ্ধ সংজ্ঞা' : 'Official Definitions'}
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-slate-900 mt-2 tracking-tight">
-                Bangladesh Tax Glossary & Terminology
+                {t('guide.glossaryHeading', 'Bangladesh Tax Glossary & Terminology')}
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-                Statutory definitions with plain explanations, practical examples, and Income Tax Act citations.
+                {isBengali
+                  ? 'আইনগত সূত্রের সাথে আয়করের জটিল পরিভাষাগুলোর সহজ ও দ্বিভাষিক ব্যাখ্যা।'
+                  : 'Statutory definitions with plain explanations, practical examples, and Income Tax Act citations.'}
               </p>
             </div>
           </div>
@@ -324,25 +328,26 @@ export const TaxGuidePage = () => {
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="font-black text-slate-900 text-sm sm:text-base">
-                      {item.term}
+                      {isBengali ? item.bangla : item.term}
                     </h3>
                     <span className="text-xs font-bold text-emerald-800 bg-emerald-100/80 px-2 py-0.5 rounded-md border border-emerald-200 shrink-0">
-                      {item.bangla}
+                      {isBengali ? item.term : item.bangla}
                     </span>
                   </div>
 
                   <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                    {item.definition}
+                    {isBengali && item.definitionBn ? item.definitionBn : item.definition}
                   </p>
 
                   <div className="mt-3 p-2.5 bg-white rounded-xl border border-slate-200/80 text-[11px] text-slate-700">
-                    <strong className="text-slate-900">Example:</strong> {item.example}
+                    <strong className="text-slate-900">{isBengali ? 'উদাহরণ:' : 'Example:'}</strong>{' '}
+                    {isBengali && item.exampleBn ? item.exampleBn : item.example}
                   </div>
                 </div>
 
                 <div className="mt-3 pt-2.5 border-t border-slate-200/60 flex items-center justify-between text-[10px] font-bold text-slate-500">
                   <span className="truncate">{item.source}</span>
-                  <span className="text-emerald-700 shrink-0">NBR Verified</span>
+                  <span className="text-emerald-700 shrink-0">{isBengali ? 'এনবিআর যাচাইকৃত' : 'NBR Verified'}</span>
                 </div>
               </div>
             ))}
@@ -353,15 +358,17 @@ export const TaxGuidePage = () => {
         <div className="bg-slate-900 text-white rounded-3xl p-6 sm:p-8 space-y-4 shadow-xl">
           <div className="flex items-center gap-2.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
             <ShieldCheck className="w-4 h-4" />
-            <span>Statutory Reference & Non-Affiliation Notice</span>
+            <span>{isBengali ? 'সংবিধিবদ্ধ সূত্র ও আইনগত সতর্কতা' : 'Statutory Reference & Non-Affiliation Notice'}</span>
           </div>
 
           <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-4xl">
-            This education hub is provided for educational and tax planning awareness. All statutory tax rates, progressive slabs, Section 78 rebate caps, and threshold limits are <strong>based on published information from the National Board of Revenue (NBR)</strong> and the <strong>Income Tax Act 2023</strong>.
+            {isBengali
+              ? 'এই প্ল্যাটফর্মের সমস্ত শিক্ষামূলক বিষয়বস্তু, করের হার, প্রগতিশীল কর ধাপ এবং ধারা ৭৮ রেয়াতের তথ্য জাতীয় রাজস্ব বোর্ড (NBR) কর্তৃক প্রকাশিত আয়কর আইন ২০২৩ এবং সংশ্লিষ্ট অর্থ আইনের বিধান অনুযায়ী সংকলিত।'
+              : 'This education hub is provided for educational and tax planning awareness. All statutory tax rates, progressive slabs, Section 78 rebate caps, and threshold limits are based on published information from the National Board of Revenue (NBR) and the Income Tax Act 2023.'}
           </p>
 
           <p className="text-xs text-slate-400 border-t border-slate-800 pt-3">
-            Tax rules can change. Always verify your final tax liability using official NBR guidance or a qualified tax professional before official return submission.
+            {t('common.officialDisclaimer')}
           </p>
         </div>
       </div>

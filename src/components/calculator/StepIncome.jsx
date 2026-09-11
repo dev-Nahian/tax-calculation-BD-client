@@ -8,14 +8,13 @@ import {
   Landmark,
   Coins,
   Sparkles,
-  Info,
-  Layers,
 } from 'lucide-react';
 import IncomeCard from './IncomeCard';
-import { formatBDT, formatShortBDT } from '../../utils/formatters';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const StepIncome = ({ inputs, onUpdateField }) => {
   const [useDetailedSalary, setUseDetailedSalary] = useState(false);
+  const { t, isBengali, formatMoney } = useLanguage();
 
   // Sum up total gross income across all 7 statutory heads
   const basicSalary = Number(inputs.salaryIncome || 0);
@@ -42,10 +41,10 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="text-center space-y-2">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Your Annual Income
+          {t('calculator.step3.heading')}
         </h2>
         <p className="text-sm sm:text-base text-slate-600">
-          Enter the annual income earned during the income year (1 July to 30 June). Only fill in the sources that apply to you.
+          {t('calculator.step3.subheading')}
         </p>
       </div>
 
@@ -54,14 +53,14 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-100 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-emerald-300" />
-            Total Estimated Annual Gross Income
+            {t('calculator.step3.totalGrossTally')}
           </span>
           <div className="text-2xl sm:text-3xl font-black mt-1 tracking-tight">
-            {formatBDT(totalGross)}
+            {formatMoney(totalGross)}
           </div>
         </div>
         <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl text-xs font-medium text-emerald-50">
-          All 7 statutory income heads supported
+          {t('calculator.step3.supportedHeads')}
         </div>
       </div>
 
@@ -70,25 +69,34 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
         {/* 1. Salary Card */}
         <IncomeCard
           icon={Briefcase}
-          title="Salary & Employment"
-          subtitle="Your annual salary, allowances, bonuses, and employment remuneration."
+          title={isBengali ? 'চাকরি বা বেতন থেকে আয়' : 'Salary & Employment'}
+          titleSecondary={isBengali ? 'Salary & Employment (Head 1)' : 'বেতন ও চাকরি'}
+          subtitle={
+            isBengali
+              ? 'বাৎসরিক মূল বেতন, বাড়ি ভাড়া ভাতা, চিকিৎসা ভাতা, যাতায়াত ভাতা ও উৎসব বোনাস।'
+              : 'Your annual salary, allowances, bonuses, and employment remuneration.'
+          }
           value={inputs.salaryIncome}
           onChange={(val) => onUpdateField('salaryIncome', val)}
           id="income-salary"
           placeholder="e.g. 600000"
-          badge="Head 1"
+          badge={isBengali ? '১ম খাত' : 'Head 1'}
           colorScheme="emerald"
         >
           <div className="bg-slate-50/80 rounded-xl p-4 border border-slate-200 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">Itemize Salary Allowances</span>
-              <span className="text-[11px] text-slate-500">Statutory exemptions applied automatically</span>
+              <span className="text-xs font-bold text-slate-700">
+                {isBengali ? 'বেতনের উপাদানসমূহ বিস্তারিত লিখুন' : 'Itemize Salary Allowances'}
+              </span>
+              <span className="text-[11px] text-slate-500">
+                {isBengali ? 'আইনগত করমুক্ত সুবিধা স্বয়ংক্রিয়ভাবে হিসাব হবে' : 'Statutory exemptions applied automatically'}
+              </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  House Rent Allowance
+                  {isBengali ? 'বাড়ি ভাড়া ভাতা (House Rent)' : 'House Rent Allowance'}
                 </label>
                 <input
                   type="number"
@@ -102,7 +110,7 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
 
               <div>
                 <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  Medical Allowance
+                  {isBengali ? 'চিকিৎসা ভাতা (Medical Allowance)' : 'Medical Allowance'}
                 </label>
                 <input
                   type="number"
@@ -116,7 +124,7 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
 
               <div>
                 <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  Conveyance Allowance
+                  {isBengali ? 'যাতায়াত ভাতা (Conveyance Allowance)' : 'Conveyance Allowance'}
                 </label>
                 <input
                   type="number"
@@ -130,7 +138,7 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
 
               <div>
                 <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  Festival Bonus & Others
+                  {isBengali ? 'উৎসব বোনাস ও অন্যান্য (Festival Bonus & Others)' : 'Festival Bonus & Others'}
                 </label>
                 <input
                   type="number"
@@ -148,78 +156,108 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
         {/* 2. House Property */}
         <IncomeCard
           icon={Home}
-          title="House Property"
-          subtitle="Rental income earned from residential apartments, houses, shops, or commercial spaces."
+          title={isBengali ? 'গৃহ-সম্পত্তি বা বাড়ি ভাড়া থেকে আয়' : 'House Property'}
+          titleSecondary={isBengali ? 'House Property (Head 2)' : 'গৃহ-সম্পত্তি'}
+          subtitle={
+            isBengali
+              ? 'আবাসিক ফ্ল্যাট, বাড়ি, দোকান বা বাণিজ্যিক স্থান ভাড়া বাবদ প্রাপ্ত মোট বার্ষিক আয়।'
+              : 'Rental income earned from residential apartments, houses, shops, or commercial spaces.'
+          }
           value={inputs.housePropertyIncome}
           onChange={(val) => onUpdateField('housePropertyIncome', val)}
           id="income-house-property"
           placeholder="0"
-          badge="Head 2"
+          badge={isBengali ? '২য় খাত' : 'Head 2'}
           colorScheme="blue"
         />
 
         {/* 3. Business & Profession */}
         <IncomeCard
           icon={Building2}
-          title="Business & Profession"
-          subtitle="Net profits from sole proprietorship, freelance services, consulting, or partnership trade."
+          title={isBengali ? 'ব্যবসা ও পেশা থেকে আয়' : 'Business & Profession'}
+          titleSecondary={isBengali ? 'Business & Profession (Head 3)' : 'ব্যবসা ও পেশা'}
+          subtitle={
+            isBengali
+              ? 'একমালিকানা ব্যবসা, ফ্রিল্যান্সিং, কনসালটেন্সি বা পেশাগত সেবা থেকে অর্জিত নিট লাভ।'
+              : 'Net profits from sole proprietorship, freelance services, consulting, or partnership trade.'
+          }
           value={inputs.businessIncome}
           onChange={(val) => onUpdateField('businessIncome', val)}
           id="income-business"
           placeholder="0"
-          badge="Head 3"
+          badge={isBengali ? '৩য় খাত' : 'Head 3'}
           colorScheme="purple"
         />
 
         {/* 4. Agriculture */}
         <IncomeCard
           icon={Wheat}
-          title="Agriculture"
-          subtitle="Net income from crop production, tea gardens, cattle, livestock, poultry, or fisheries."
+          title={isBengali ? 'কৃষি থেকে আয়' : 'Agriculture'}
+          titleSecondary={isBengali ? 'Agriculture (Head 4)' : 'কৃষি খাত'}
+          subtitle={
+            isBengali
+              ? 'ফসল উৎপাদন, চা বাগান, গবাদিপশু পালন, পোল্ট্রি বা মৎস্য খামার থেকে অর্জিত নিট আয়।'
+              : 'Net income from crop production, tea gardens, cattle, livestock, poultry, or fisheries.'
+          }
           value={inputs.agricultureIncome}
           onChange={(val) => onUpdateField('agricultureIncome', val)}
           id="income-agriculture"
           placeholder="0"
-          badge="Head 4"
+          badge={isBengali ? '৪র্থ খাত' : 'Head 4'}
           colorScheme="amber"
         />
 
         {/* 5. Capital Gains */}
         <IncomeCard
           icon={TrendingUp}
-          title="Capital Gains"
-          subtitle="Profits resulting from the sale or transfer of real estate, land, shares, or capital assets."
+          title={isBengali ? 'মূলধনী লাভ' : 'Capital Gains'}
+          titleSecondary={isBengali ? 'Capital Gains (Head 5)' : 'মূলধনী মুনাফা'}
+          subtitle={
+            isBengali
+              ? 'জমি, ফ্ল্যাট, বাণিজ্যিক সম্পত্তি, শেয়ার বা স্থায়ী পরিসম্পদ বিক্রির মাধ্যমে প্রাপ্ত মুনাফা।'
+              : 'Profits resulting from the sale or transfer of real estate, land, shares, or capital assets.'
+          }
           value={inputs.capitalGains}
           onChange={(val) => onUpdateField('capitalGains', val)}
           id="income-capital-gains"
           placeholder="0"
-          badge="Head 5"
+          badge={isBengali ? '৫ম খাত' : 'Head 5'}
           colorScheme="teal"
         />
 
         {/* 6. Financial Assets */}
         <IncomeCard
           icon={Landmark}
-          title="Financial Assets"
-          subtitle="Interest, profit, and dividends from bank savings, Fixed Term Deposits (FDR), or bonds."
+          title={isBengali ? 'আর্থিক পরিসম্পদ থেকে আয়' : 'Financial Assets'}
+          titleSecondary={isBengali ? 'Financial Assets (Head 6)' : 'আর্থিক পরিসম্পদ'}
+          subtitle={
+            isBengali
+              ? 'ব্যাংক সঞ্চয়ী হিসাব, স্থায়ী আমানত (FDR) ও সঞ্চয়পত্রের অর্জিত সুদ ও মুনাফা।'
+              : 'Interest, profit, and dividends from bank savings, Fixed Term Deposits (FDR), or bonds.'
+          }
           value={inputs.financialAssets}
           onChange={(val) => onUpdateField('financialAssets', val)}
           id="income-financial-assets"
           placeholder="0"
-          badge="Head 6"
+          badge={isBengali ? '৬ষ্ঠ খাত' : 'Head 6'}
           colorScheme="indigo"
         />
 
         {/* 7. Other Sources */}
         <IncomeCard
           icon={Coins}
-          title="Other Income Sources"
-          subtitle="Royalties, prize bonds, lottery winnings, honorary fees, or non-employment earnings."
+          title={isBengali ? 'অন্যান্য উৎস থেকে আয়' : 'Other Income Sources'}
+          titleSecondary={isBengali ? 'Other Sources (Head 7)' : 'অন্যান্য উৎস'}
+          subtitle={
+            isBengali
+              ? 'রয়্যালটি, প্রাইজবন্ড, লটারি, সম্মাননা ভাতা বা অনির্ধারিত অন্যান্য উৎস থেকে আয়।'
+              : 'Royalties, prize bonds, lottery winnings, honorary fees, or non-employment earnings.'
+          }
           value={inputs.otherIncome}
           onChange={(val) => onUpdateField('otherIncome', val)}
           id="income-other"
           placeholder="0"
-          badge="Head 7"
+          badge={isBengali ? '৭ম খাত' : 'Head 7'}
           colorScheme="emerald"
         />
       </div>

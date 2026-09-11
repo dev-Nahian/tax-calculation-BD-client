@@ -1,31 +1,28 @@
 export const NAV_LINKS = [
-  { name: 'Home', path: '/' },
-  { name: 'Calculate Tax', path: '/calculate' },
-  { name: 'Tax Guide', path: '/tax-guide' },
-  { name: 'Tax Rules', path: '/tax-rules' },
-  { name: 'FAQ', path: '/faq' },
-  { name: 'About', path: '/about' },
+  { name: 'Home', key: 'nav.home', path: '/' },
+  { name: 'Tax Calculator', key: 'nav.calculator', path: '/calculate' },
+  { name: 'Tax Guide', key: 'nav.taxGuide', path: '/tax-guide' },
+  { name: 'Tax Rules', key: 'nav.taxRules', path: '/tax-rules' },
+  { name: 'Admin', key: 'nav.admin', path: '/admin' },
 ];
 
 export const FOOTER_LINKS = {
   navigation: [
-    { name: 'Home', path: '/' },
-    { name: 'Calculate Tax', path: '/calculate' },
-    { name: 'Tax Guide', path: '/tax-guide' },
-    { name: 'Tax Rules', path: '/tax-rules' },
-    { name: 'Admin Rules', path: '/admin/tax-rules' },
-    { name: 'FAQ', path: '/faq' },
-    { name: 'About TaxBD', path: '/about' },
+    { name: 'Home', key: 'nav.home', path: '/' },
+    { name: 'Tax Calculator', key: 'nav.calculator', path: '/calculate' },
+    { name: 'Tax Guide', key: 'nav.taxGuide', path: '/tax-guide' },
+    { name: 'Tax Rules', key: 'nav.taxRules', path: '/tax-rules' },
+    { name: 'Admin Portal', key: 'nav.admin', path: '/admin' },
   ],
   resources: [
-    { name: 'NBR Official Portal', href: 'https://nbr.gov.bd', external: true },
-    { name: 'e-TIN Registration', href: 'https://secure.incometax.gov.bd/TINHome', external: true },
-    { name: 'e-Return Filing System', href: 'https://etaxnbr.gov.bd', external: true },
-    { name: 'Income Tax Act 2023', href: 'https://nbr.gov.bd/rules/acts/income-tax-act', external: true },
+    { name: 'NBR Official Portal', nameBn: 'জাতীয় রাজস্ব বোর্ড (এনবিআর)', href: 'https://nbr.gov.bd', external: true },
+    { name: 'e-Return Online Filing', nameBn: 'ই-রিটার্ন অনলাইন সিস্টেম', href: 'https://etaxnbr.gov.bd', external: true },
+    { name: 'e-TIN Registration', nameBn: 'অনলাইন ই-টিআইএন নিবন্ধন', href: 'https://secure.incometax.gov.bd/TINHome', external: true },
+    { name: 'Income Tax Act 2023', nameBn: 'আয়কর আইন ২০২৩ গেজেট', href: 'https://nbr.gov.bd/rules/acts/income-tax-act', external: true },
   ],
   legal: [
-    { name: 'Disclaimer', path: '/about#disclaimer' },
-    { name: 'Privacy Transparency', path: '/about#privacy' },
-    { name: 'Methodology', path: '/about#methodology' },
+    { name: 'Statutory Disclaimer', nameBn: 'আইনগত সতর্কবার্তা', path: '/about#disclaimer' },
+    { name: 'Privacy Transparency', nameBn: 'গোপনীয়তা ও স্বচ্ছতা', path: '/about#privacy' },
+    { name: 'Calculation Methodology', nameBn: 'হিসাব পদ্ধতি', path: '/about#methodology' },
   ],
 };

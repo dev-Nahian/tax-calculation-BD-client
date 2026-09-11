@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { formatBDT, formatShortBDT } from '../../utils/formatters';
-import { HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const IncomeCard = ({
   icon: Icon,
@@ -13,12 +13,13 @@ export const IncomeCard = ({
   children,
   badge,
   colorScheme = 'emerald',
+  titleSecondary,
+  expandLabel,
+  collapseLabel,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { isBengali, formatMoney } = useLanguage();
   const numValue = Number(value) || 0;
-
-  // Format with South Asian commas for display in helper
-  const formattedHelp = numValue > 0 ? formatShortBDT(numValue) : null;
 
   const colorStyles = {
     emerald: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
@@ -39,8 +40,13 @@ export const IncomeCard = ({
             <Icon className="w-5 h-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <h3 className="text-base font-bold text-slate-800">{title}</h3>
+              {titleSecondary && (
+                <span className="text-[11px] font-medium text-slate-400">
+                  {titleSecondary}
+                </span>
+              )}
               {badge && (
                 <span className="px-2 py-0.5 text-[11px] font-semibold bg-brand-50 text-brand-700 rounded-full border border-brand-200/60">
                   {badge}
@@ -54,7 +60,7 @@ export const IncomeCard = ({
 
       <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <label htmlFor={id} className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          Annual Amount
+          {isBengali ? 'বার্ষিক পরিমাণ (টাকা)' : 'Annual Amount'}
         </label>
         <div className="relative w-full sm:w-64">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-sm">
@@ -70,9 +76,9 @@ export const IncomeCard = ({
             placeholder={placeholder}
             className="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-right"
           />
-          {formattedHelp && (
+          {numValue > 0 && (
             <span className="block text-right text-[11px] font-medium text-emerald-600 mt-1">
-              ≈ {formattedHelp}
+              ≈ {formatMoney(numValue)}
             </span>
           )}
         </div>
@@ -87,11 +93,11 @@ export const IncomeCard = ({
           >
             {isExpanded ? (
               <>
-                <ChevronUp className="w-4 h-4" /> Hide itemized breakdown
+                <ChevronUp className="w-4 h-4" /> {collapseLabel || (isBengali ? 'বিস্তারিত ভাতা লুকান' : 'Hide itemized breakdown')}
               </>
             ) : (
               <>
-                <ChevronDown className="w-4 h-4" /> Itemize salary allowances (Exemptions apply)
+                <ChevronDown className="w-4 h-4" /> {expandLabel || (isBengali ? 'ভাতা অনুযায়ী বিস্তারিত বিবরণ দিন (বাড়ি ভাড়া, চিকিৎসা, ইত্যাদি)' : 'Itemize salary allowances (Exemptions apply)')}
               </>
             )}
           </button>

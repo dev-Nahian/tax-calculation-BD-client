@@ -7,10 +7,10 @@ import {
   CheckCircle2,
   ArrowLeft,
   ArrowRight,
-  Sparkles,
   RotateCcw,
 } from 'lucide-react';
 import { useTax } from '../../hooks/useTax';
+import { useLanguage } from '../../context/LanguageContext';
 import StepAssessmentYear from './StepAssessmentYear';
 import StepAboutYou from './StepAboutYou';
 import StepIncome from './StepIncome';
@@ -37,6 +37,8 @@ export const CalculatorWizard = () => {
     loading,
     resetInputs,
   } = useTax();
+
+  const { t, isBengali, formatNumber } = useLanguage();
 
   const [currentStep, setCurrentStep] = useState(() => {
     return getStorageItem(STORAGE_STEP_KEY, 1);
@@ -88,7 +90,10 @@ export const CalculatorWizard = () => {
   };
 
   const handleResetAll = () => {
-    if (window.confirm('Are you sure you want to reset all inputs and start fresh?')) {
+    const confirmMessage = isBengali
+      ? 'আপনি কি নিশ্চিত যে সমস্ত তথ্য মুছে দিয়ে পুনরায় শুরু করতে চান?'
+      : 'Are you sure you want to reset all inputs and start fresh?';
+    if (window.confirm(confirmMessage)) {
       resetInputs();
       setCurrentStep(1);
       setStorageItem(STORAGE_STEP_KEY, 1);
@@ -96,11 +101,36 @@ export const CalculatorWizard = () => {
   };
 
   const stepsConfig = [
-    { number: 1, title: 'Year', label: 'Assessment Year', icon: Calendar },
-    { number: 2, title: 'Profile', label: 'About You', icon: User },
-    { number: 3, title: 'Income', label: 'Your Income', icon: DollarSign },
-    { number: 4, title: 'Rebates', label: 'Deductions / Rebates', icon: PiggyBank },
-    { number: 5, title: 'Review', label: 'Review & Compute', icon: CheckCircle2 },
+    {
+      number: 1,
+      title: isBengali ? 'করবর্ষ' : 'Year',
+      label: t('calculator.steps.assessmentYear', 'Assessment Year'),
+      icon: Calendar,
+    },
+    {
+      number: 2,
+      title: isBengali ? 'করদাতা' : 'Profile',
+      label: t('calculator.steps.aboutYou', 'About You'),
+      icon: User,
+    },
+    {
+      number: 3,
+      title: isBengali ? 'আয়' : 'Income',
+      label: t('calculator.steps.income', 'Your Income'),
+      icon: DollarSign,
+    },
+    {
+      number: 4,
+      title: isBengali ? 'রেয়াত' : 'Rebates',
+      label: t('calculator.steps.deductions', 'Deductions / Rebates'),
+      icon: PiggyBank,
+    },
+    {
+      number: 5,
+      title: isBengali ? 'যাচাই' : 'Review',
+      label: t('calculator.steps.review', 'Review & Compute'),
+      icon: CheckCircle2,
+    },
   ];
 
   return (
@@ -110,7 +140,9 @@ export const CalculatorWizard = () => {
         <div className="bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/80 shadow-sm mb-8">
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-extrabold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-              Step {currentStep} of 5 — {stepsConfig[currentStep - 1]?.label}
+              {isBengali
+                ? `ধাপ ${formatNumber(currentStep)} / ${formatNumber(5)} — ${stepsConfig[currentStep - 1]?.label}`
+                : `Step ${currentStep} of 5 — ${stepsConfig[currentStep - 1]?.label}`}
             </span>
 
             <button
@@ -118,7 +150,8 @@ export const CalculatorWizard = () => {
               onClick={handleResetAll}
               className="text-xs font-semibold text-slate-500 hover:text-red-600 flex items-center gap-1 transition-colors"
             >
-              <RotateCcw className="w-3.5 h-3.5" /> Reset Calculator
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>{t('common.reset', 'Reset Calculator')}</span>
             </button>
           </div>
 
@@ -249,7 +282,7 @@ export const CalculatorWizard = () => {
                 : 'border-slate-300 text-slate-700 bg-white hover:bg-slate-50'
             }`}
           >
-            <ArrowLeft className="w-4 h-4" /> Back
+            <ArrowLeft className="w-4 h-4" /> {t('common.back', 'Back')}
           </button>
 
           <button
@@ -257,7 +290,7 @@ export const CalculatorWizard = () => {
             onClick={handleNext}
             className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-bold text-sm text-white bg-emerald-600 hover:bg-emerald-700 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5"
           >
-            Continue <ArrowRight className="w-4 h-4" />
+            {t('common.continue', 'Continue')} <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       )}
@@ -275,7 +308,7 @@ export const CalculatorWizard = () => {
                 : 'border-slate-300 text-slate-700 bg-white'
             }`}
           >
-            <ArrowLeft className="w-3.5 h-3.5" /> Back
+            <ArrowLeft className="w-3.5 h-3.5" /> {t('common.back', 'Back')}
           </button>
 
           <button
@@ -283,7 +316,7 @@ export const CalculatorWizard = () => {
             onClick={handleNext}
             className="flex-1 py-3 px-4 rounded-xl font-bold text-xs text-white bg-emerald-600 hover:bg-emerald-700 shadow-md flex items-center justify-center gap-1.5"
           >
-            Continue <ArrowRight className="w-3.5 h-3.5" />
+            {t('common.continue', 'Continue')} <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
@@ -292,3 +325,4 @@ export const CalculatorWizard = () => {
 };
 
 export default CalculatorWizard;
+

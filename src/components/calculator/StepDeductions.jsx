@@ -1,18 +1,14 @@
 import React from 'react';
 import {
-  ShieldCheck,
   PiggyBank,
   FileCheck,
   TrendingUp,
   Landmark,
   HeartPulse,
   Coins,
-  Car,
-  Home,
-  Info,
   Sparkles,
 } from 'lucide-react';
-import { formatBDT, formatShortBDT } from '../../utils/formatters';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const StepDeductions = ({
   investments = {},
@@ -20,6 +16,8 @@ export const StepDeductions = ({
   otherInformation = {},
   onUpdateOtherInfo,
 }) => {
+  const { t, isBengali, formatMoney } = useLanguage();
+
   const dps = Number(investments.dps || 0);
   const sanchayapatra = Number(investments.sanchayapatra || 0);
   const lifeInsurance = Number(investments.lifeInsurance || 0);
@@ -32,8 +30,11 @@ export const StepDeductions = ({
   const investmentItems = [
     {
       id: 'dps',
-      name: 'Deposit Pension Scheme (DPS)',
-      description: 'Monthly savings deposit scheme in scheduled banks (capped at ৳1,20,000/year for tax rebate).',
+      name: isBengali ? 'ডিপিএস কিস্তি (DPS)' : 'Deposit Pension Scheme (DPS)',
+      nameEn: isBengali ? 'DPS Monthly Savings' : 'ডিপিএস কিস্তি',
+      description: isBengali
+        ? 'তফসিলি ব্যাংকে ডিপিএস কিস্তি (বাৎসরিক সর্বোচ্চ ১,২০,০০০ টাকা পর্যন্ত কর রেয়াতযোগ্য)।'
+        : 'Monthly savings deposit scheme in scheduled banks (capped at ৳1,20,000/year for tax rebate).',
       value: investments.dps,
       icon: PiggyBank,
       color: 'emerald',
@@ -41,8 +42,11 @@ export const StepDeductions = ({
     },
     {
       id: 'sanchayapatra',
-      name: 'Sanchayapatra (Savings Certificates)',
-      description: 'Government National Savings Certificates (excluding 5-year Bangladesh Sanchayapatra with final tax).',
+      name: isBengali ? 'সঞ্চয়পত্রে বিনিয়োগ' : 'Sanchayapatra (Savings Certificates)',
+      nameEn: isBengali ? 'National Savings Certificates' : 'জাতীয় সঞ্চয়পত্র',
+      description: isBengali
+        ? 'জাতীয় সঞ্চয় অধিদপ্তরের সরকার অনুমোদিত সঞ্চয়পত্র (চূড়ান্ত কর কর্তিত সঞ্চয়পত্র ব্যতীত)।'
+        : 'Government National Savings Certificates (excluding 5-year Bangladesh Sanchayapatra with final tax).',
       value: investments.sanchayapatra,
       icon: FileCheck,
       color: 'blue',
@@ -50,8 +54,11 @@ export const StepDeductions = ({
     },
     {
       id: 'lifeInsurance',
-      name: 'Life Insurance Premium',
-      description: 'Annual premium paid for life insurance policies covering self, spouse, or minor children.',
+      name: isBengali ? 'জীবন বীমার প্রিমিয়াম' : 'Life Insurance Premium',
+      nameEn: isBengali ? 'Life Insurance Premium' : 'জীবন বীমা প্রিমিয়াম',
+      description: isBengali
+        ? 'নিজের অথবা স্বামী/স্ত্রী ও সন্তানদের জীবনের ওপর প্রদত্ত বাৎসরিক প্রিমিয়াম।'
+        : 'Annual premium paid for life insurance policies covering self, spouse, or minor children.',
       value: investments.lifeInsurance,
       icon: HeartPulse,
       color: 'purple',
@@ -59,8 +66,11 @@ export const StepDeductions = ({
     },
     {
       id: 'stockMarket',
-      name: 'Stock Market & Mutual Funds',
-      description: 'Investment in shares of listed companies on DSE/CSE or SEC-approved mutual funds.',
+      name: isBengali ? 'শেয়ার বাজার ও মিউচুয়াল ফান্ড' : 'Stock Market & Mutual Funds',
+      nameEn: isBengali ? 'DSE/CSE Listed Stocks' : 'পুঁজিবাজারে বিনিয়োগ',
+      description: isBengali
+        ? 'ডিএসই/সিএসই-তে তালিকাভুক্ত কোম্পানির শেয়ার বা বিএসইসি অনুমোদিত মিউচুয়াল ফান্ডে বিনিয়োগ।'
+        : 'Investment in shares of listed companies on DSE/CSE or SEC-approved mutual funds.',
       value: investments.stockMarket,
       icon: TrendingUp,
       color: 'amber',
@@ -68,8 +78,11 @@ export const StepDeductions = ({
     },
     {
       id: 'providentFund',
-      name: 'Recognized Provident Fund (GPF / EPF)',
-      description: 'Self contributions to Government Provident Fund or approved corporate provident funds.',
+      name: isBengali ? 'স্বীকৃত প্রভিডেন্ট ফান্ড (GPF/RPF)' : 'Recognized Provident Fund (GPF / EPF)',
+      nameEn: isBengali ? 'Recognized Provident Fund' : 'স্বীকৃত প্রভিডেন্ট ফান্ড',
+      description: isBengali
+        ? 'সরকারি ভবিষ্যৎ তহবিল বা অনুমোদিত প্রাতিষ্ঠানিক প্রভিডেন্ট ফান্ডে বাৎসরিক নিজস্ব জমার অংশ।'
+        : 'Self contributions to Government Provident Fund or approved corporate provident funds.',
       value: investments.providentFund,
       icon: Landmark,
       color: 'indigo',
@@ -77,8 +90,11 @@ export const StepDeductions = ({
     },
     {
       id: 'otherEligible',
-      name: 'Other Approved Securities & Benevolent Fund',
-      description: 'Treasury bonds, government securities, benevolent fund, or donations to national welfare funds.',
+      name: isBengali ? 'অন্যান্য অনুমোদিত সিকিউরিটিজ ও তহবিল' : 'Other Approved Securities & Benevolent Fund',
+      nameEn: isBengali ? 'Treasury Bonds & Welfare Funds' : 'ট্রেজারি বন্ড ও কল্যাণ তহবিল',
+      description: isBengali
+        ? 'সরকারি ট্রেজারি বন্ড, কল্যাণ তহবিল, গ্রুপ বীমা বা সরকারি অনুমোদিত জাতীয় তহবিলে অনুদান।'
+        : 'Treasury bonds, government securities, benevolent fund, or donations to national welfare funds.',
       value: investments.otherEligible,
       icon: Coins,
       color: 'teal',
@@ -90,10 +106,10 @@ export const StepDeductions = ({
     <div className="space-y-8 max-w-4xl mx-auto">
       <div className="text-center space-y-2">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          What applies to you?
+          {t('calculator.step4.heading')}
         </h2>
         <p className="text-sm sm:text-base text-slate-600">
-          Under Section 78 of the Income Tax Act 2023, you can claim up to <strong>15% tax rebate</strong> on eligible investments to significantly reduce your final tax bill.
+          {t('calculator.step4.subheading')}
         </p>
       </div>
 
@@ -102,14 +118,14 @@ export const StepDeductions = ({
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-blue-200 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-blue-300" />
-            Total Claimed Eligible Investments
+            {isBengali ? 'মোট দাবিকৃত কর রেয়াতযোগ্য বিনিয়োগ' : 'Total Claimed Eligible Investments'}
           </span>
           <div className="text-2xl sm:text-3xl font-black mt-1 tracking-tight">
-            {formatBDT(totalInvestments)}
+            {formatMoney(totalInvestments)}
           </div>
         </div>
         <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl text-xs font-medium text-blue-50">
-          Rebate: 15% of allowable investments
+          {isBengali ? 'কর রেয়াত: অনুমোদিত বিনিয়োগের ১৫%' : 'Rebate: 15% of allowable investments'}
         </div>
       </div>
 
@@ -129,15 +145,18 @@ export const StepDeductions = ({
                     <Icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
-                    <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{item.description}</p>
+                    <div className="flex items-baseline gap-1.5 flex-wrap">
+                      <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
+                      <span className="text-[10px] text-slate-400 font-medium">{item.nameEn}</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">{item.description}</p>
                   </div>
                 </div>
               </div>
 
               <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
                 <label htmlFor={item.id} className="text-xs font-semibold text-slate-500">
-                  Investment
+                  {isBengali ? 'বিনিয়োগের পরিমাণ' : 'Investment'}
                 </label>
                 <div className="relative w-44">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
@@ -155,7 +174,7 @@ export const StepDeductions = ({
                   />
                   {num > 0 && (
                     <span className="block text-right text-[10px] font-medium text-emerald-600 mt-0.5">
-                      ≈ {formatShortBDT(num)}
+                      ≈ {formatMoney(num)}
                     </span>
                   )}
                 </div>
@@ -173,16 +192,18 @@ export const StepDeductions = ({
           </div>
           <div className="flex-1">
             <h4 className="text-sm font-bold text-slate-900">
-              Net Wealth & Asset Disclosure (Optional)
+              {t('calculator.step4.netWealthHeading')}
             </h4>
             <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-              In Bangladesh, net wealth surcharge only applies if total net wealth exceeds <strong>৳4 Crore</strong> or if you own multiple motor cars / 8,000+ sq ft property.
+              {isBengali
+                ? 'আয়কর আইন অনুযায়ী মোট নিট পরিসম্পদ ৪ কোটি টাকার বেশি হলে অথবা একাধিক গাড়ি / ৮,০০০ বর্গফুটের বেশি বাড়ি থাকলে প্রদেয় করের ওপর ১০% থেকে ৩৫% সারচার্জ প্রযোজ্য হয়।'
+                : 'In Bangladesh, net wealth surcharge only applies if total net wealth exceeds ৳4 Crore or if you own multiple motor cars / 8,000+ sq ft property.'}
             </p>
 
             <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-1">
                 <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  Total Net Wealth
+                  {isBengali ? 'মোট নিট পরিসম্পদ (টাকা)' : 'Total Net Wealth'}
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
@@ -207,7 +228,11 @@ export const StepDeductions = ({
                     onChange={(e) => onUpdateOtherInfo('ownsMultipleCars', e.target.checked)}
                     className="rounded text-brand-600 focus:ring-brand-500 w-4 h-4"
                   />
-                  <span>I own more than one motor car / vehicle</span>
+                  <span>
+                    {isBengali
+                      ? 'আমার একাধিক মোটরগাড়ি বা ৮,০০০ সিসির অধিক ক্ষমতাসম্পন্ন জিপ/এসইউভি রয়েছে'
+                      : 'I own more than one motor car / vehicle'}
+                  </span>
                 </label>
 
                 <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-700">
@@ -217,7 +242,11 @@ export const StepDeductions = ({
                     onChange={(e) => onUpdateOtherInfo('ownsLargeHouseProperty', e.target.checked)}
                     className="rounded text-brand-600 focus:ring-brand-500 w-4 h-4"
                   />
-                  <span>I own a residential property exceeding 8,000 sq ft</span>
+                  <span>
+                    {isBengali
+                      ? 'সিটি কর্পোরেশনে ৮,০০০ বর্গফুটের অধিক আয়তনের ফ্ল্যাট বা বাড়ি রয়েছে'
+                      : 'I own a residential property exceeding 8,000 sq ft'}
+                  </span>
                 </label>
               </div>
             </div>

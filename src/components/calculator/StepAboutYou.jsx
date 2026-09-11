@@ -1,6 +1,7 @@
 import React from 'react';
-import { User, MapPin, HeartHandshake, Check, Info, Shield, Sparkles, Baby } from 'lucide-react';
-import { formatBDT } from '../../utils/formatters';
+import { User, MapPin, Check, Baby } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import TermBadge from '../common/TermBadge';
 
 export const StepAboutYou = ({
   category,
@@ -12,69 +13,101 @@ export const StepAboutYou = ({
   disabledChildrenCount,
   onChangeDisabledChildren,
 }) => {
+  const { t, isBengali, formatMoney, formatNumber } = useLanguage();
+
   const categories = [
     {
       id: 'general',
-      title: 'Individual (Male)',
+      title: isBengali ? 'সাধারণ ব্যক্তি করদাতা' : 'Individual (Male)',
+      titleEn: isBengali ? 'General Individual (Under 65)' : 'সাধারণ করদাতা',
       threshold: 350000,
-      description: 'General individual taxpayers under 65 years of age.',
-      tag: '৳3.5 Lakh Tax-Free',
+      description: isBengali
+        ? '৬৫ বছরের কম বয়সী সকল পুরুষ ব্যক্তি করদাতা।'
+        : 'General individual taxpayers under 65 years of age.',
+      tag: isBengali ? '৳ ৩.৫ লাখ করমুক্ত' : '৳3.5 Lakh Tax-Free',
     },
     {
       id: 'female',
-      title: 'Female Taxpayer',
+      title: isBengali ? 'মহিলা করদাতা' : 'Female Taxpayer',
+      titleEn: isBengali ? 'Female Taxpayer' : 'মহিলা করদাতা',
       threshold: 400000,
-      description: 'All female individual taxpayers.',
-      tag: '৳4.0 Lakh Tax-Free',
+      description: isBengali
+        ? 'সকল নারী করদাতার জন্য বিশেষ করমুক্ত প্রারম্ভিক সীমা।'
+        : 'All female individual taxpayers.',
+      tag: isBengali ? '৳ ৪.০ লাখ করমুক্ত' : '৳4.0 Lakh Tax-Free',
     },
     {
       id: 'seniorCitizen',
-      title: 'Senior Citizen (65+)',
+      title: isBengali ? 'প্রবীণ নাগরিক (৬৫+ বছর)' : 'Senior Citizen (65+)',
+      titleEn: isBengali ? 'Senior Citizen' : 'প্রবীণ নাগরিক',
       threshold: 400000,
-      description: 'Taxpayers aged 65 years or older as of the income year.',
-      tag: '৳4.0 Lakh Tax-Free',
+      description: isBengali
+        ? 'আয়বর্ষের শেষ দিনে যাদের বয়স ৬৫ বছর বা তদূর্ধ্ব।'
+        : 'Taxpayers aged 65 years or older as of the income year.',
+      tag: isBengali ? '৳ ৪.০ লাখ করমুক্ত' : '৳4.0 Lakh Tax-Free',
     },
     {
       id: 'thirdGender',
-      title: 'Third Gender Taxpayer',
+      title: isBengali ? 'তৃতীয় লিঙ্গের করদাতা' : 'Third Gender Taxpayer',
+      titleEn: isBengali ? 'Third Gender (Hijra)' : 'তৃতীয় লিঙ্গ',
       threshold: 400000,
-      description: 'Taxpayers belonging to the third gender community.',
-      tag: '৳4.0 Lakh Tax-Free',
+      description: isBengali
+        ? 'তৃতীয় লিঙ্গভুক্ত সম্মানিত করদাতাগণ।'
+        : 'Taxpayers belonging to the third gender community.',
+      tag: isBengali ? '৳ ৪.০ লাখ করমুক্ত' : '৳4.0 Lakh Tax-Free',
     },
     {
       id: 'disabled',
-      title: 'Person with Disability',
+      title: isBengali ? 'প্রতিবন্ধী ব্যক্তি করদাতা' : 'Person with Disability',
+      titleEn: isBengali ? 'Physically Challenged' : 'প্রতিবন্ধী ব্যক্তি',
       threshold: 475000,
-      description: 'Individuals holding certified proof of physical or mental disability.',
-      tag: '৳4.75 Lakh Tax-Free',
+      description: isBengali
+        ? 'যথাযথ কর্তৃপক্ষ কর্তৃক শারীরিক প্রতিবন্ধিতার সনদপ্রাপ্ত করদাতা।'
+        : 'Individuals holding certified proof of physical or mental disability.',
+      tag: isBengali ? '৳ ৪.৭৫ লাখ করমুক্ত' : '৳4.75 Lakh Tax-Free',
     },
     {
       id: 'freedomFighter',
-      title: 'Gazetted Freedom Fighter',
+      title: isBengali ? 'গেজেটভুক্ত যুদ্ধাহত বীর মুক্তিযোদ্ধা' : 'Gazetted Freedom Fighter',
+      titleEn: isBengali ? 'Gazetted Freedom Fighter' : 'যুদ্ধাহত মুক্তিযোদ্ধা',
       threshold: 500000,
-      description: 'Gazetted war-wounded freedom fighters of Bangladesh.',
-      tag: '৳5.0 Lakh Tax-Free',
+      description: isBengali
+        ? 'বাংলাদেশ সরকারের গেজেটভুক্ত যুদ্ধাহত বীর মুক্তিযোদ্ধাগণ।'
+        : 'Gazetted war-wounded freedom fighters of Bangladesh.',
+      tag: isBengali ? '৳ ৫.০ লাখ করমুক্ত' : '৳5.0 Lakh Tax-Free',
     },
   ];
 
   const zones = [
     {
       id: 'dhaka_chattogram',
-      title: 'Dhaka & Chattogram City Corporations',
+      title: isBengali
+        ? 'ঢাকা ও চট্টগ্রাম সিটি কর্পোরেশন'
+        : 'Dhaka & Chattogram City Corporations',
       amount: 5000,
-      description: 'Residing in North Dhaka, South Dhaka, or Chattogram City Corporation.',
+      description: isBengali
+        ? 'উত্তর ঢাকা, দক্ষিণ ঢাকা বা চট্টগ্রাম সিটি কর্পোরেশন এলাকায় বসবাসকারী।'
+        : 'Residing in North Dhaka, South Dhaka, or Chattogram City Corporation.',
     },
     {
       id: 'other_city_corporation',
-      title: 'Other City Corporation Areas',
+      title: isBengali
+        ? 'অন্যান্য সিটি কর্পোরেশন এলাকা'
+        : 'Other City Corporation Areas',
       amount: 4000,
-      description: 'Rajshahi, Khulna, Sylhet, Barishal, Rangpur, Cumilla, Gazipur, Narayanganj, Mymensingh.',
+      description: isBengali
+        ? 'রাজশাহী, খুলনা, সিলেট, বরিশাল, রংপুর, কুমিল্লা, গাজীপুর, নারায়ণগঞ্জ, ময়মনসিংহ।'
+        : 'Rajshahi, Khulna, Sylhet, Barishal, Rangpur, Cumilla, Gazipur, Narayanganj, Mymensingh.',
     },
     {
       id: 'non_city_corporation',
-      title: 'Municipalities / Upazilas / Rural Areas',
+      title: isBengali
+        ? 'পৌরসভা / উপজেলা / জেলা ও পল্লী এলাকা'
+        : 'Municipalities / Upazilas / Rural Areas',
       amount: 3000,
-      description: 'All areas outside designated city corporation boundaries.',
+      description: isBengali
+        ? 'সিটি কর্পোরেশন সীমানার বাইরে অবস্থিত অন্যান্য সকল এলাকা।'
+        : 'All areas outside designated city corporation boundaries.',
     },
   ];
 
@@ -82,10 +115,10 @@ export const StepAboutYou = ({
     <div className="space-y-8 max-w-4xl mx-auto">
       <div className="text-center space-y-2">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          About You
+          {t('calculator.step2.heading')}
         </h2>
         <p className="text-sm sm:text-base text-slate-600">
-          Your taxpayer category and location determine your statutory tax-free exemption limit and minimum tax rate.
+          {t('calculator.step2.subheading')}
         </p>
       </div>
 
@@ -94,7 +127,7 @@ export const StepAboutYou = ({
         <div className="flex items-center justify-between">
           <label className="text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
             <User className="w-4 h-4 text-brand-600" />
-            1. Select Your Taxpayer Category
+            {t('calculator.step2.categoryTitle')}
           </label>
         </div>
 
@@ -113,9 +146,16 @@ export const StepAboutYou = ({
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
-                    <span className="font-bold text-slate-900 text-sm sm:text-base">{cat.title}</span>
+                    <div>
+                      <span className="font-bold text-slate-900 text-sm sm:text-base block">
+                        {cat.title}
+                      </span>
+                      <span className="text-[11px] font-medium text-slate-400">
+                        {cat.titleEn}
+                      </span>
+                    </div>
                     <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center border ${
+                      className={`w-5 h-5 rounded-full flex items-center justify-center border shrink-0 ${
                         isSelected
                           ? 'bg-emerald-600 border-emerald-600 text-white'
                           : 'border-slate-300 bg-white'
@@ -124,7 +164,7 @@ export const StepAboutYou = ({
                       {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
                     </div>
                   </div>
-                  <p className="text-xs text-slate-500 mt-1">{cat.description}</p>
+                  <p className="text-xs text-slate-500 mt-2">{cat.description}</p>
                 </div>
                 <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-[11px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-full border border-emerald-200">
@@ -141,9 +181,13 @@ export const StepAboutYou = ({
       <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-sm space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Your Age</h3>
+            <h3 className="text-sm font-bold text-slate-900">
+              {t('calculator.step2.ageLabel')}
+            </h3>
             <p className="text-xs text-slate-500 mt-0.5">
-              Individuals aged 65 and above automatically qualify for the Senior Citizen ৳4,00,000 exemption.
+              {isBengali
+                ? '৬৫ বছর বা তদূর্ধ্ব হলে স্বয়ংক্রিয়ভাবে প্রবীণ করদাতার ৳ ৪,০০,০০০ করমুক্ত সুবিধা প্রযোজ্য হবে।'
+                : 'Individuals aged 65 and above automatically qualify for the Senior Citizen ৳4,00,000 exemption.'}
             </p>
           </div>
           <div className="w-full sm:w-48">
@@ -164,10 +208,10 @@ export const StepAboutYou = ({
       <div className="space-y-3">
         <label className="text-sm font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
           <MapPin className="w-4 h-4 text-brand-600" />
-          2. Where is your principal location / residence?
+          {t('calculator.step2.locationTitle')}
         </label>
         <p className="text-xs text-slate-500">
-          Section 73 of the Income Tax Act requires a statutory minimum tax payment based on location once taxable income exceeds the tax-free limit.
+          {t('calculator.step2.locationSubtitle')}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 mt-2">
@@ -187,7 +231,7 @@ export const StepAboutYou = ({
                   <div className="flex items-start justify-between gap-2">
                     <span className="font-bold text-slate-900 text-sm">{z.title}</span>
                     <div
-                      className={`w-5 h-5 rounded-full flex items-center justify-center border ${
+                      className={`w-5 h-5 rounded-full flex items-center justify-center border shrink-0 ${
                         isSelected
                           ? 'bg-blue-600 border-blue-600 text-white'
                           : 'border-slate-300 bg-white'
@@ -200,7 +244,8 @@ export const StepAboutYou = ({
                 </div>
                 <div className="mt-3 pt-2.5 border-t border-slate-100">
                   <span className="text-xs font-bold text-blue-700">
-                    Min Tax: {formatBDT(z.amount)}
+                    {isBengali ? 'ন্যূনতম কর: ' : 'Min Tax: '}
+                    {formatMoney(z.amount)}
                   </span>
                 </div>
               </div>
@@ -219,14 +264,20 @@ export const StepAboutYou = ({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div>
                 <h4 className="text-sm font-bold text-slate-900">
-                  Parent / Guardian of Disabled Dependent Child
+                  {isBengali
+                    ? 'প্রতিবন্ধী সন্তানের পিতা/মাতা বা আইনানুগ অভিভাবক'
+                    : 'Parent / Guardian of Disabled Dependent Child'}
                 </h4>
                 <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-                  Parents or legal guardians of disabled children receive an additional <strong>৳50,000</strong> tax-free exemption per child.
+                  {isBengali
+                    ? 'প্রতিটি প্রতিবন্ধী সন্তানের জন্য পিতা/মাতা অতিরিক্ত ৫০,০০০ টাকা করমুক্ত সুবিধার অধিকারী হবেন।'
+                    : 'Parents or legal guardians of disabled children receive an additional ৳50,000 tax-free exemption per child.'}
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-semibold text-slate-500">Number of children:</span>
+                <span className="text-xs font-semibold text-slate-500">
+                  {t('calculator.step2.disabledChildrenCount')}:
+                </span>
                 <input
                   type="number"
                   min="0"

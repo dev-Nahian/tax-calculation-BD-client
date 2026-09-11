@@ -2,32 +2,43 @@ import React from 'react';
 import { Eye, Shield, Percent, Sparkles, Scale, Zap } from 'lucide-react';
 import Card from '../common/Card';
 import Badge from '../common/Badge';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const WhyTaxBD = () => {
+  const { t, language } = useLanguage();
+
   const features = [
     {
       icon: Eye,
-      title: 'Crystal Clear Transparency',
-      desc: 'No hidden formulas or ambiguous math. We break down every single slab, exemption, and rebate line-by-line so you see exactly where each Taka goes.',
-      tag: 'Transparency',
+      title: language === 'bn' ? 'স্বচ্ছ ও স্পষ্ট হিসাব' : 'Crystal Clear Transparency',
+      desc: language === 'bn'
+        ? 'কোনো অস্পষ্ট সূত্র ছাড়াই প্রতিটি কর ধাপ, করমুক্ত সীমা এবং কর রেয়াতের পুঙ্খানুপুঙ্খ বিবরণ।'
+        : 'No hidden formulas or ambiguous math. We break down every single slab, exemption, and rebate line-by-line so you see exactly where each Taka goes.',
+      tag: language === 'bn' ? 'স্বচ্ছতা' : 'Transparency',
     },
     {
       icon: Scale,
-      title: 'Income Tax Act 2023 Aligned',
-      desc: 'Updated for the latest National Board of Revenue rules, allowable exemption ceilings (house rent, medical), and gender/category thresholds.',
-      tag: 'NBR Compliance',
+      title: language === 'bn' ? 'আয়কর আইন ২০২৩ অনুযায়ী' : 'Income Tax Act 2023 Aligned',
+      desc: language === 'bn'
+        ? 'জাতীয় রাজস্ব বোর্ডের সর্বাধুনিক বিধিমালা, বাড়িভাড়া ও চিকিৎসা ভাতা ছাড়ের সর্বোচ্চ সীমা অনুযায়ী হালনাগাদকৃত।'
+        : 'Updated for the latest National Board of Revenue rules, allowable exemption ceilings (house rent, medical), and gender/category thresholds.',
+      tag: language === 'bn' ? 'এনবিআর সঙ্গতি' : 'NBR Compliance',
     },
     {
       icon: Percent,
-      title: 'Smart Investment Rebate (Sec 78)',
-      desc: 'Discover how much you can save through DPS, Sanchayapatra, Life Insurance, and Stock investments with our 15% rebate estimator.',
-      tag: 'Tax Savings',
+      title: language === 'bn' ? 'স্মার্ট বিনিয়োগ রেয়াত (ধারা ৭৮)' : 'Smart Investment Rebate (Sec 78)',
+      desc: language === 'bn'
+        ? 'ডিপিএস, সঞ্চয়পত্র, জীবন বীমা ও শেয়ারবাজারে বিনিয়োগ করে সর্বোচ্চ ১৫% কর রেয়াতের সুযোগ।'
+        : 'Discover how much you can save through DPS, Sanchayapatra, Life Insurance, and Stock investments with our 15% rebate estimator.',
+      tag: language === 'bn' ? 'কর সাশ্রয়' : 'Tax Savings',
     },
     {
       icon: Shield,
-      title: 'Privacy-First Architecture',
-      desc: 'Your financial information stays in your browser. We never share, sell, or track your personal income figures.',
-      tag: 'Confidential',
+      title: language === 'bn' ? 'সম্পূর্ণ গোপনীয় ও নিরাপদ' : 'Privacy-First Architecture',
+      desc: language === 'bn'
+        ? 'আপনার আর্থিক তথ্য আপনার ব্রাউজারেই সংরক্ষিত থাকে। আমরা কোনো ব্যক্তিগত আয়কর তথ্য সংরক্ষণ বা ট্র্যাক করি না।'
+        : 'Your financial information stays in your browser. We never share, sell, or track your personal income figures.',
+      tag: language === 'bn' ? 'গোপনীয়' : 'Confidential',
     },
   ];
 
@@ -36,13 +47,15 @@ export const WhyTaxBD = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
           <Badge variant="primary" icon={Sparkles} className="mb-3">
-            Why TaxBD
+            {t('home.whyTitle')}
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 text-balance">
-            Tax computation in Bangladesh doesn’t have to be confusing.
+            {language === 'bn'
+              ? 'বাংলাদেশে আয়কর হিসাব আর জটিল নয়।'
+              : 'Tax computation in Bangladesh doesn’t have to be confusing.'}
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed text-balance">
-            We built TaxBD to replace complicated spreadsheets and dense gazettes with a clean, friendly financial assistant.
+            {t('home.whySubtitle')}
           </p>
         </div>
 
