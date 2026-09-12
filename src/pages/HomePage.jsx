@@ -1,4 +1,5 @@
 import React from 'react';
+import SEO from '../components/common/SEO';
 import Hero from '../components/home/Hero';
 import WhyTaxBD from '../components/home/WhyTaxBD';
 import HowItWorks from '../components/home/HowItWorks';
@@ -12,6 +13,11 @@ import CTASection from '../components/home/CTASection';
 export const HomePage = () => {
   return (
     <div className="space-y-0">
+      <SEO
+        title="TaxBD — Transparent Bangladesh Income Tax Platform"
+        description="Calculate individual income tax, explore progressive tax slabs, calculate investment rebates under Section 78, and learn NBR tax rules in plain Bengali and English."
+      />
+
       {/* 1. Hero */}
       <Hero />
 

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PageHero from '../components/common/PageHero';
+import SEO from '../components/common/SEO';
 import { HelpCircle, Search, ChevronDown } from 'lucide-react';
 import { FAQ_ITEMS } from '../constants/faqData';
 import Card from '../components/common/Card';
@@ -30,6 +31,10 @@ export const FAQPage = () => {
 
   return (
     <div className="pb-16">
+      <SEO
+        title="Frequently Asked Questions (FAQ) — Bangladesh Income Tax"
+        description="Clear, verified answers to common questions about Bangladesh taxable income, slab rates, deductions, and NBR filing compliance."
+      />
       <PageHero
         badge={language === 'bn' ? 'সহায়তা ও জ্ঞানভাণ্ডার' : 'Help & Knowledge Base'}
         badgeIcon={HelpCircle}

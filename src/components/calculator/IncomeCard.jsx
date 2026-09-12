@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { CurrencyInput } from '../common/CurrencyInput';
 
 export const IncomeCard = ({
   icon: Icon,
@@ -18,8 +19,7 @@ export const IncomeCard = ({
   collapseLabel,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isBengali, formatMoney } = useLanguage();
-  const numValue = Number(value) || 0;
+  const { isBengali } = useLanguage();
 
   const colorStyles = {
     emerald: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
@@ -33,22 +33,22 @@ export const IncomeCard = ({
   const activeColor = colorStyles[colorScheme] || colorStyles.emerald;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200/80 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200">
+    <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200">
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-start gap-3.5">
-          <div className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border ${activeColor}`}>
+          <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 border ${activeColor}`}>
             <Icon className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-base font-bold text-slate-800">{title}</h3>
+              <h3 className="text-base font-bold text-slate-900">{title}</h3>
               {titleSecondary && (
                 <span className="text-[11px] font-medium text-slate-400">
                   {titleSecondary}
                 </span>
               )}
               {badge && (
-                <span className="px-2 py-0.5 text-[11px] font-semibold bg-brand-50 text-brand-700 rounded-full border border-brand-200/60">
+                <span className="px-2.5 py-0.5 text-[11px] font-semibold bg-emerald-50 text-emerald-700 rounded-full border border-emerald-200/60">
                   {badge}
                 </span>
               )}
@@ -59,41 +59,29 @@ export const IncomeCard = ({
       </div>
 
       <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <label htmlFor={id} className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-          {isBengali ? 'বার্ষিক পরিমাণ (টাকা)' : 'Annual Amount'}
-        </label>
-        <div className="relative w-full sm:w-64">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 font-bold text-sm">
-            ৳
-          </div>
-          <input
+        <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          {isBengali ? 'বার্ষিক পরিমাণ (টাকা)' : 'Annual Gross Amount'}
+        </span>
+        <div className="w-full sm:w-64">
+          <CurrencyInput
             id={id}
-            type="number"
-            min="0"
-            step="1000"
-            value={value === 0 ? '' : value}
-            onChange={(e) => onChange(Math.max(0, Number(e.target.value) || 0))}
+            value={value}
+            onChange={(num) => onChange(num)}
             placeholder={placeholder}
-            className="w-full pl-8 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 font-bold text-base focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all text-right"
           />
-          {numValue > 0 && (
-            <span className="block text-right text-[11px] font-medium text-emerald-600 mt-1">
-              ≈ {formatMoney(numValue)}
-            </span>
-          )}
         </div>
       </div>
 
       {children && (
-        <div className="mt-3">
+        <div className="mt-4">
           <button
             type="button"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 transition-colors"
+            className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors focus:outline-none"
           >
             {isExpanded ? (
               <>
-                <ChevronUp className="w-4 h-4" /> {collapseLabel || (isBengali ? 'বিস্তারিত ভাতা লুকান' : 'Hide itemized breakdown')}
+                <ChevronUp className="w-4 h-4" /> {collapseLabel || (isBengali ? 'বিস্তারিত ভাতা লুকান' : 'Hide itemized allowances')}
               </>
             ) : (
               <>
@@ -101,7 +89,7 @@ export const IncomeCard = ({
               </>
             )}
           </button>
-          {isExpanded && <div className="mt-3 pt-3 border-t border-slate-100">{children}</div>}
+          {isExpanded && <div className="mt-4 pt-4 border-t border-slate-100">{children}</div>}
         </div>
       )}
     </div>

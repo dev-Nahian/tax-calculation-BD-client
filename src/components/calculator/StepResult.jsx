@@ -20,6 +20,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { useLanguage } from '../../context/LanguageContext';
 import { Link } from 'react-router-dom';
 import SourceModal from '../common/SourceModal';
+import { AnimatedNumber } from '../common/AnimatedNumber';
 
 export const StepResult = ({
   results,

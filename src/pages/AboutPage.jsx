@@ -1,5 +1,6 @@
 import React from 'react';
 import PageHero from '../components/common/PageHero';
+import SEO from '../components/common/SEO';
 import { Info, ShieldAlert, Heart, Building2, CheckCircle2, Lock, FileCheck } from 'lucide-react';
 import Card from '../components/common/Card';
 import Badge from '../components/common/Badge';
@@ -7,6 +8,10 @@ import Badge from '../components/common/Badge';
 export const AboutPage = () => {
   return (
     <div className="pb-16">
+      <SEO
+        title="About TaxBD — Mission, Transparency & Security"
+        description="Learn about TaxBD, an independent civic fintech platform dedicated to transparent, accessible Bangladesh tax computation and education."
+      />
       <PageHero
         badge="About TaxBD"
         badgeIcon={Info}

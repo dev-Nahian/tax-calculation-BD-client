@@ -10,6 +10,8 @@ import {
   Sparkles,
 } from 'lucide-react';
 import IncomeCard from './IncomeCard';
+import { CurrencyInput } from '../common/CurrencyInput';
+import { AnimatedNumber } from '../common/AnimatedNumber';
 import { useLanguage } from '../../context/LanguageContext';
 
 export const StepIncome = ({ inputs, onUpdateField }) => {
@@ -49,17 +51,17 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
       </div>
 
       {/* Floating Total Gross Income Tally */}
-      <div className="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-5 sm:p-6 text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 rounded-3xl p-5 sm:p-6 text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-emerald-100 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-emerald-300" />
             {t('calculator.step3.totalGrossTally')}
           </span>
           <div className="text-2xl sm:text-3xl font-black mt-1 tracking-tight">
-            {formatMoney(totalGross)}
+            <AnimatedNumber value={totalGross} />
           </div>
         </div>
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl text-xs font-medium text-emerald-50">
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-2xl text-xs font-medium text-emerald-50 self-start sm:self-auto">
           {t('calculator.step3.supportedHeads')}
         </div>
       </div>
@@ -83,9 +85,9 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
           badge={isBengali ? '১ম খাত' : 'Head 1'}
           colorScheme="emerald"
         >
-          <div className="bg-slate-50/80 rounded-xl p-4 border border-slate-200 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-700">
+          <div className="bg-slate-50/80 rounded-2xl p-4 sm:p-5 border border-slate-200/80 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+              <span className="text-xs font-bold text-slate-800">
                 {isBengali ? 'বেতনের উপাদানসমূহ বিস্তারিত লিখুন' : 'Itemize Salary Allowances'}
               </span>
               <span className="text-[11px] text-slate-500">
@@ -93,62 +95,38 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  {isBengali ? 'বাড়ি ভাড়া ভাতা (House Rent)' : 'House Rent Allowance'}
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={inputs.houseRentAllowance === 0 ? '' : inputs.houseRentAllowance}
-                  onChange={(e) => onUpdateField('houseRentAllowance', Number(e.target.value) || 0)}
-                  placeholder="e.g. 180000"
-                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                />
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <CurrencyInput
+                id="houseRentAllowance"
+                label={isBengali ? 'বাড়ি ভাড়া ভাতা (House Rent)' : 'House Rent Allowance'}
+                value={inputs.houseRentAllowance}
+                onChange={(val) => onUpdateField('houseRentAllowance', val)}
+                placeholder="e.g. 180000"
+              />
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  {isBengali ? 'চিকিৎসা ভাতা (Medical Allowance)' : 'Medical Allowance'}
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={inputs.medicalAllowance === 0 ? '' : inputs.medicalAllowance}
-                  onChange={(e) => onUpdateField('medicalAllowance', Number(e.target.value) || 0)}
-                  placeholder="e.g. 36000"
-                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                />
-              </div>
+              <CurrencyInput
+                id="medicalAllowance"
+                label={isBengali ? 'চিকিৎসা ভাতা (Medical Allowance)' : 'Medical Allowance'}
+                value={inputs.medicalAllowance}
+                onChange={(val) => onUpdateField('medicalAllowance', val)}
+                placeholder="e.g. 36000"
+              />
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  {isBengali ? 'যাতায়াত ভাতা (Conveyance Allowance)' : 'Conveyance Allowance'}
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={inputs.conveyanceAllowance === 0 ? '' : inputs.conveyanceAllowance}
-                  onChange={(e) => onUpdateField('conveyanceAllowance', Number(e.target.value) || 0)}
-                  placeholder="e.g. 24000"
-                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                />
-              </div>
+              <CurrencyInput
+                id="conveyanceAllowance"
+                label={isBengali ? 'যাতায়াত ভাতা (Conveyance Allowance)' : 'Conveyance Allowance'}
+                value={inputs.conveyanceAllowance}
+                onChange={(val) => onUpdateField('conveyanceAllowance', val)}
+                placeholder="e.g. 24000"
+              />
 
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  {isBengali ? 'উৎসব বোনাস ও অন্যান্য (Festival Bonus & Others)' : 'Festival Bonus & Others'}
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  value={inputs.festivalBonus === 0 ? '' : inputs.festivalBonus}
-                  onChange={(e) => onUpdateField('festivalBonus', Number(e.target.value) || 0)}
-                  placeholder="e.g. 80000"
-                  className="w-full px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-right focus:ring-2 focus:ring-emerald-500 focus:outline-none"
-                />
-              </div>
+              <CurrencyInput
+                id="festivalBonus"
+                label={isBengali ? 'উৎসব বোনাস ও অন্যান্য (Festival Bonus & Others)' : 'Festival Bonus & Others'}
+                value={inputs.festivalBonus}
+                onChange={(val) => onUpdateField('festivalBonus', val)}
+                placeholder="e.g. 80000"
+              />
             </div>
           </div>
         </IncomeCard>
@@ -210,48 +188,48 @@ export const StepIncome = ({ inputs, onUpdateField }) => {
         {/* 5. Capital Gains */}
         <IncomeCard
           icon={TrendingUp}
-          title={isBengali ? 'মূলধনী লাভ' : 'Capital Gains'}
-          titleSecondary={isBengali ? 'Capital Gains (Head 5)' : 'মূলধনী মুনাফা'}
+          title={isBengali ? 'মূলধনী লাভ বা সম্পত্তি বিক্রয়' : 'Capital Gains'}
+          titleSecondary={isBengali ? 'Capital Gains (Head 5)' : 'মূলধনী লাভ'}
           subtitle={
             isBengali
-              ? 'জমি, ফ্ল্যাট, বাণিজ্যিক সম্পত্তি, শেয়ার বা স্থায়ী পরিসম্পদ বিক্রির মাধ্যমে প্রাপ্ত মুনাফা।'
-              : 'Profits resulting from the sale or transfer of real estate, land, shares, or capital assets.'
+              ? 'জমি, ফ্ল্যাট, শেয়ার, মিউচুয়াল ফান্ড বা মূলধনী সম্পদ বিক্রয় থেকে অর্জিত নিট মুনাফা।'
+              : 'Net profits realized from the transfer or sale of land, buildings, shares, and capital assets.'
           }
           value={inputs.capitalGains}
           onChange={(val) => onUpdateField('capitalGains', val)}
           id="income-capital-gains"
           placeholder="0"
           badge={isBengali ? '৫ম খাত' : 'Head 5'}
-          colorScheme="teal"
+          colorScheme="indigo"
         />
 
         {/* 6. Financial Assets */}
         <IncomeCard
           icon={Landmark}
-          title={isBengali ? 'আর্থিক পরিসম্পদ থেকে আয়' : 'Financial Assets'}
+          title={isBengali ? 'আর্থিক পরিসম্পদ বা সুদ/মুনাফা' : 'Financial Assets (Interest/Dividends)'}
           titleSecondary={isBengali ? 'Financial Assets (Head 6)' : 'আর্থিক পরিসম্পদ'}
           subtitle={
             isBengali
-              ? 'ব্যাংক সঞ্চয়ী হিসাব, স্থায়ী আমানত (FDR) ও সঞ্চয়পত্রের অর্জিত সুদ ও মুনাফা।'
-              : 'Interest, profit, and dividends from bank savings, Fixed Term Deposits (FDR), or bonds.'
+              ? 'ব্যাংক সঞ্চয়ী হিসাবের সুদ, এফডিআর (FDR), ট্রেজারি বন্ড বা লভ্যাংশ আয়।'
+              : 'Interest from savings bank deposits, Fixed Deposits (FDR), treasury bonds, and dividend payouts.'
           }
           value={inputs.financialAssets}
           onChange={(val) => onUpdateField('financialAssets', val)}
           id="income-financial-assets"
           placeholder="0"
           badge={isBengali ? '৬ষ্ঠ খাত' : 'Head 6'}
-          colorScheme="indigo"
+          colorScheme="teal"
         />
 
         {/* 7. Other Sources */}
         <IncomeCard
           icon={Coins}
-          title={isBengali ? 'অন্যান্য উৎস থেকে আয়' : 'Other Income Sources'}
+          title={isBengali ? 'অন্যান্য উৎস থেকে আয়' : 'Other Sources'}
           titleSecondary={isBengali ? 'Other Sources (Head 7)' : 'অন্যান্য উৎস'}
           subtitle={
             isBengali
-              ? 'রয়্যালটি, প্রাইজবন্ড, লটারি, সম্মাননা ভাতা বা অনির্ধারিত অন্যান্য উৎস থেকে আয়।'
-              : 'Royalties, prize bonds, lottery winnings, honorary fees, or non-employment earnings.'
+              ? 'পুরস্কার, রয়্যালটি, গিফট, খণ্ডকালীন সম্মাননা বা উপরের ছয়টি খাতের বহির্ভূত অন্য যেকোনো আয়।'
+              : 'Lottery/prize winnings, royalties, gifts, director honorarium, or unclassified revenue.'
           }
           value={inputs.otherIncome}
           onChange={(val) => onUpdateField('otherIncome', val)}

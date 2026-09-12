@@ -4,6 +4,7 @@ import { LanguageProvider } from './context/LanguageContext';
 import { AuthProvider } from './context/AuthContext';
 import { AdminAuthProvider } from './context/AdminAuthContext';
 import { TaxProvider } from './context/TaxContext';
+import { ToastProvider } from './components/common/Toast';
 import AppRoutes from './routes/AppRoutes';
 
 export function App() {
@@ -13,7 +14,9 @@ export function App() {
         <AuthProvider>
           <AdminAuthProvider>
             <TaxProvider>
-              <AppRoutes />
+              <ToastProvider>
+                <AppRoutes />
+              </ToastProvider>
             </TaxProvider>
           </AdminAuthProvider>
         </AuthProvider>

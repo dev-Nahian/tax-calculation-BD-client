@@ -19,6 +19,7 @@ import {
 import { useLanguage } from '../context/LanguageContext';
 import { GUIDE_ARTICLES, GUIDE_CATEGORIES } from '../constants/taxGuideData';
 import SourceModal from '../components/common/SourceModal';
+import SEO from '../components/common/SEO';
 
 export const TaxGuideArticlePage = () => {
   const { slug } = useParams();
@@ -59,6 +60,10 @@ export const TaxGuideArticlePage = () => {
 
   return (
     <div className="pb-24 animate-fadeIn">
+      <SEO
+        title={`${isBengali && article.titleBn ? article.titleBn : article.title} — TaxBD Guide`}
+        description={isBengali && article.shortExplanationBn ? article.shortExplanationBn : article.shortExplanation}
+      />
       {/* Article Top Navigation Bar */}
       <div className="bg-slate-50 border-b border-slate-200/80 py-4">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">

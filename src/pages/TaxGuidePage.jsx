@@ -18,6 +18,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import PageHero from '../components/common/PageHero';
+import SEO from '../components/common/SEO';
 import { useLanguage } from '../context/LanguageContext';
 import {
   GUIDE_CATEGORIES,
@@ -80,6 +81,10 @@ export const TaxGuidePage = () => {
 
   return (
     <div className="pb-20">
+      <SEO
+        title="Bangladesh Tax Education Hub & Glossary"
+        description="Master Bangladesh personal income tax concepts, statutory allowances, investment rebate limits under Section 78, and e-filing guides in plain English and Bengali."
+      />
       {/* Hero Header */}
       <PageHero
         badge={isBengali ? 'আয়কর শিক্ষা কেন্দ্র' : 'Tax Education Hub'}

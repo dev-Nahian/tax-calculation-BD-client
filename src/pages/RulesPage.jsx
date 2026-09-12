@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageHero from '../components/common/PageHero';
+import SEO from '../components/common/SEO';
 import {
   Scale,
   ShieldCheck,
@@ -52,6 +53,10 @@ export const RulesPage = () => {
 
   return (
     <div className="pb-24 animate-fadeIn">
+      <SEO
+        title="Bangladesh Tax Rules & Gazette Explorer"
+        description="Explore authentic Bangladesh tax rules across assessment years: tax slabs, thresholds, minimum tax, allowable rebates, and Finance Act amendments."
+      />
       {/* Page Hero */}
       <PageHero
         badge={language === 'bn' ? 'সংবিধিবদ্ধ আইন ভাণ্ডার' : 'Regulatory Explorer'}

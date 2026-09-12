@@ -7,8 +7,12 @@ import {
   HeartPulse,
   Coins,
   Sparkles,
+  ShieldCheck,
+  AlertTriangle,
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { CurrencyInput } from '../common/CurrencyInput';
+import { AnimatedNumber } from '../common/AnimatedNumber';
 
 export const StepDeductions = ({
   investments = {},
@@ -102,8 +106,17 @@ export const StepDeductions = ({
     },
   ];
 
+  const colorStyles = {
+    emerald: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+    blue: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+    purple: 'bg-purple-500/10 text-purple-600 border-purple-500/20',
+    amber: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+    indigo: 'bg-indigo-500/10 text-indigo-600 border-indigo-500/20',
+    teal: 'bg-teal-500/10 text-teal-600 border-teal-500/20',
+  };
+
   return (
-    <div className="space-y-8 max-w-4xl mx-auto">
+    <div className="space-y-6 max-w-4xl mx-auto">
       <div className="text-center space-y-2">
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           {t('calculator.step4.heading')}
@@ -113,70 +126,65 @@ export const StepDeductions = ({
         </p>
       </div>
 
-      {/* Rebate Tally Banner */}
-      <div className="bg-gradient-to-r from-blue-700 to-indigo-800 rounded-2xl p-5 sm:p-6 text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      {/* Floating Total Investments Tally */}
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-600 to-blue-800 rounded-3xl p-5 sm:p-6 text-white shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-200 flex items-center gap-1.5">
+          <span className="text-xs font-bold uppercase tracking-wider text-blue-100 flex items-center gap-1.5">
             <Sparkles className="w-4 h-4 text-blue-300" />
-            {isBengali ? 'মোট দাবিকৃত কর রেয়াতযোগ্য বিনিয়োগ' : 'Total Claimed Eligible Investments'}
+            {t('calculator.step4.totalEligibleTally')}
           </span>
           <div className="text-2xl sm:text-3xl font-black mt-1 tracking-tight">
-            {formatMoney(totalInvestments)}
+            <AnimatedNumber value={totalInvestments} />
           </div>
         </div>
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-xl text-xs font-medium text-blue-50">
-          {isBengali ? 'কর রেয়াত: অনুমোদিত বিনিয়োগের ১৫%' : 'Rebate: 15% of allowable investments'}
+        <div className="bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 rounded-2xl text-xs font-medium text-blue-50 self-start sm:self-auto">
+          {t('calculator.step4.rebateFormula')}
         </div>
       </div>
 
-      {/* Section 78 Investment Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Investments List */}
+      <div className="space-y-4">
         {investmentItems.map((item) => {
-          const Icon = item.icon;
-          const num = Number(item.value) || 0;
+          const IconComponent = item.icon;
+          const activeColor = colorStyles[item.color] || colorStyles.emerald;
+
           return (
             <div
               key={item.id}
-              className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:border-slate-300 transition-all flex flex-col justify-between"
+              className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-sm hover:shadow-md transition-all duration-200"
             >
-              <div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-5 h-5" />
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start gap-3.5">
+                  <div className={`w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0 border ${activeColor}`}>
+                    <IconComponent className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="flex items-baseline gap-1.5 flex-wrap">
-                      <h3 className="text-sm font-bold text-slate-900">{item.name}</h3>
-                      <span className="text-[10px] text-slate-400 font-medium">{item.nameEn}</span>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-base font-bold text-slate-900">{item.name}</h3>
+                      {item.nameEn && (
+                        <span className="text-[11px] font-medium text-slate-400">
+                          {item.nameEn}
+                        </span>
+                      )}
                     </div>
-                    <p className="text-xs text-slate-500 mt-1 leading-relaxed">{item.description}</p>
+                    <p className="text-xs sm:text-sm text-slate-500 mt-0.5 leading-relaxed">
+                      {item.description}
+                    </p>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
-                <label htmlFor={item.id} className="text-xs font-semibold text-slate-500">
-                  {isBengali ? 'বিনিয়োগের পরিমাণ' : 'Investment'}
-                </label>
-                <div className="relative w-44">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
-                    ৳
-                  </div>
-                  <input
-                    id={item.id}
-                    type="number"
-                    min="0"
-                    step="1000"
-                    value={item.value === 0 ? '' : item.value}
-                    onChange={(e) => onUpdateInvestment(item.id, Math.max(0, Number(e.target.value) || 0))}
+              <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                  {isBengali ? 'বিনিয়োগকৃত পরিমাণ (টাকা)' : 'Investment Amount'}
+                </span>
+                <div className="w-full sm:w-64">
+                  <CurrencyInput
+                    id={`inv-${item.id}`}
+                    value={item.value}
+                    onChange={(val) => onUpdateInvestment(item.id, val)}
                     placeholder={item.placeholder}
-                    className="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 font-bold text-sm text-right focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                   />
-                  {num > 0 && (
-                    <span className="block text-right text-[10px] font-medium text-emerald-600 mt-0.5">
-                      ≈ {formatMoney(num)}
-                    </span>
-                  )}
                 </div>
               </div>
             </div>
@@ -184,72 +192,56 @@ export const StepDeductions = ({
         })}
       </div>
 
-      {/* Net Wealth & Surcharge Disclosure (Optional) */}
-      <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 sm:p-6 space-y-4">
-        <div className="flex items-start gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0">
-            <Coins className="w-5 h-5" />
+      {/* Net Wealth & Surcharge Information (Special Tax Triggers) */}
+      <div className="bg-white rounded-3xl border border-slate-200/80 p-5 sm:p-6 shadow-sm space-y-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center border border-amber-500/20">
+            <ShieldCheck className="w-5 h-5" />
           </div>
-          <div className="flex-1">
-            <h4 className="text-sm font-bold text-slate-900">
-              {t('calculator.step4.netWealthHeading')}
-            </h4>
-            <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">
-              {isBengali
-                ? 'আয়কর আইন অনুযায়ী মোট নিট পরিসম্পদ ৪ কোটি টাকার বেশি হলে অথবা একাধিক গাড়ি / ৮,০০০ বর্গফুটের বেশি বাড়ি থাকলে প্রদেয় করের ওপর ১০% থেকে ৩৫% সারচার্জ প্রযোজ্য হয়।'
-                : 'In Bangladesh, net wealth surcharge only applies if total net wealth exceeds ৳4 Crore or if you own multiple motor cars / 8,000+ sq ft property.'}
+          <div>
+            <h3 className="text-base font-bold text-slate-900">
+              {isBengali ? 'মোট নিট পরিসম্পদ ও সারচার্জ বিবরণ (যদি প্রযোজ্য হয়)' : 'Net Wealth & Surcharge Criteria'}
+            </h3>
+            <p className="text-xs text-slate-500">
+              {isBengali ? 'আয়কর আইন ২০২৩ অনুযায়ী ৪ কোটি টাকার অধিক নিট পরিসম্পদ থাকলে সারচার্জ প্রযোজ্য হয়।' : 'Under Income Tax Act 2023, net wealth exceeding ৳4 Crore incurs statutory surcharge.'}
             </p>
+          </div>
+        </div>
 
-            <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="sm:col-span-1">
-                <label className="block text-[11px] font-semibold text-slate-600 mb-1">
-                  {isBengali ? 'মোট নিট পরিসম্পদ (টাকা)' : 'Total Net Wealth'}
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400 font-bold text-xs">
-                    ৳
-                  </div>
-                  <input
-                    type="number"
-                    min="0"
-                    value={otherInformation.netWealth === 0 ? '' : otherInformation.netWealth}
-                    onChange={(e) => onUpdateOtherInfo('netWealth', Math.max(0, Number(e.target.value) || 0))}
-                    placeholder="0"
-                    className="w-full pl-7 pr-3 py-1.5 bg-white border border-slate-300 rounded-lg text-sm text-right focus:ring-2 focus:ring-brand-500 focus:outline-none"
-                  />
-                </div>
-              </div>
+        <div className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <CurrencyInput
+            id="netWealth"
+            label={isBengali ? 'মোট নিট পরিসম্পদ (Net Wealth)' : 'Total Net Wealth (BDT)'}
+            value={otherInformation.netWealth}
+            onChange={(val) => onUpdateOtherInfo?.('netWealth', val)}
+            placeholder="0"
+            helperText={isBengali ? '৪ কোটি টাকার কম হলে সারচার্জ প্রযোজ্য নয়।' : 'No surcharge if net wealth is under ৳4 Crore.'}
+          />
 
-              <div className="sm:col-span-2 flex flex-col justify-center space-y-2 pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(otherInformation.ownsMultipleCars)}
-                    onChange={(e) => onUpdateOtherInfo('ownsMultipleCars', e.target.checked)}
-                    className="rounded text-brand-600 focus:ring-brand-500 w-4 h-4"
-                  />
-                  <span>
-                    {isBengali
-                      ? 'আমার একাধিক মোটরগাড়ি বা ৮,০০০ সিসির অধিক ক্ষমতাসম্পন্ন জিপ/এসইউভি রয়েছে'
-                      : 'I own more than one motor car / vehicle'}
-                  </span>
-                </label>
+          <div className="space-y-3 pt-2">
+            <label className="flex items-center gap-3 p-3 rounded-2xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:bg-slate-50 transition-colors">
+              <input
+                type="checkbox"
+                checked={Boolean(otherInformation.ownsMultipleCars)}
+                onChange={(e) => onUpdateOtherInfo?.('ownsMultipleCars', e.target.checked)}
+                className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300"
+              />
+              <span className="text-xs font-semibold text-slate-700">
+                {isBengali ? 'একাধিক মোটর গাড়ির মালিকানা রয়েছে' : 'Owns more than one motor car'}
+              </span>
+            </label>
 
-                <label className="flex items-center gap-2 cursor-pointer text-xs text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(otherInformation.ownsLargeHouseProperty)}
-                    onChange={(e) => onUpdateOtherInfo('ownsLargeHouseProperty', e.target.checked)}
-                    className="rounded text-brand-600 focus:ring-brand-500 w-4 h-4"
-                  />
-                  <span>
-                    {isBengali
-                      ? 'সিটি কর্পোরেশনে ৮,০০০ বর্গফুটের অধিক আয়তনের ফ্ল্যাট বা বাড়ি রয়েছে'
-                      : 'I own a residential property exceeding 8,000 sq ft'}
-                  </span>
-                </label>
-              </div>
-            </div>
+            <label className="flex items-center gap-3 p-3 rounded-2xl border border-slate-200 bg-slate-50/50 cursor-pointer hover:bg-slate-50 transition-colors">
+              <input
+                type="checkbox"
+                checked={Boolean(otherInformation.ownsLargeHouseProperty)}
+                onChange={(e) => onUpdateOtherInfo?.('ownsLargeHouseProperty', e.target.checked)}
+                className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300"
+              />
+              <span className="text-xs font-semibold text-slate-700">
+                {isBengali ? 'সিটি কর্পোরেশনে ৮,০০০ বর্গফুটের অধিক গৃহ-সম্পত্তি রয়েছে' : 'Owns house property > 8,000 sq ft in City Corp'}
+              </span>
+            </label>
           </div>
         </div>
       </div>
