@@ -55,8 +55,12 @@ export const Hero = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-4xl mx-auto mb-10 md:mb-14">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 mb-6">
-            <Badge variant="emerald" size="md" icon={ShieldCheck} className="shadow-subtle">
+          <div className="w-full flex justify-center items-center mb-5 sm:mb-6 px-2">
+            <Badge
+              variant="emerald"
+              icon={ShieldCheck}
+              className="shadow-subtle text-[11.5px] sm:text-xs md:text-sm py-1.5 px-3.5 sm:px-4 max-w-full tracking-tight text-center leading-tight"
+            >
               {t('home.heroBadge')}
             </Badge>
           </div>
@@ -64,7 +68,7 @@ export const Hero = () => {
           {/* Headline */}
           <h1
             ref={headlineRef}
-            className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.12] mb-6 text-balance"
+            className="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight leading-[1.15] sm:leading-[1.12] mb-5 sm:mb-6 text-balance"
           >
             {t('home.heroTitlePrefix')}{' '}
             <span className="text-brand-900 bg-gradient-to-r from-brand-900 via-emerald-800 to-teal-900 bg-clip-text text-transparent">
@@ -75,7 +79,7 @@ export const Hero = () => {
           {/* Supporting Text */}
           <p
             ref={subtextRef}
-            className="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto mb-8 text-balance font-normal"
+            className="text-base sm:text-xl text-slate-600 leading-relaxed max-w-2xl mx-auto mb-7 sm:mb-8 text-balance font-normal"
           >
             {t('home.heroSubtitle')}
           </p>
@@ -83,7 +87,7 @@ export const Hero = () => {
           {/* Action CTAs */}
           <div
             ref={buttonsRef}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md sm:max-w-none mx-auto"
           >
             <Link to="/calculate" className="w-full sm:w-auto">
               <Button
@@ -91,7 +95,7 @@ export const Hero = () => {
                 size="lg"
                 icon={ArrowRight}
                 iconPosition="right"
-                className="w-full sm:w-auto shadow-md hover:shadow-lg font-semibold"
+                className="w-full sm:w-auto shadow-md hover:shadow-lg font-semibold justify-center"
               >
                 {t('home.calcButton')}
               </Button>

@@ -19,15 +19,15 @@ export const Badge = ({
   };
 
   const sizes = {
-    sm: 'text-xs px-2.5 py-0.5 font-medium',
-    md: 'text-sm px-3 py-1 font-semibold',
+    sm: 'text-[11px] sm:text-xs px-2.5 py-0.5 font-medium',
+    md: 'text-xs sm:text-sm px-3 py-1 font-semibold leading-tight sm:leading-normal',
   };
 
   return (
     <span
       className={twMerge(
         clsx(
-          'inline-flex items-center gap-1.5 rounded-full border',
+          'inline-flex items-center justify-center gap-1.5 rounded-full border max-w-full text-center',
           variants[variant],
           sizes[size],
           className
@@ -35,7 +35,7 @@ export const Badge = ({
       )}
     >
       {Icon && <Icon className="w-3.5 h-3.5 shrink-0" />}
-      <span>{children}</span>
+      <span className="text-center">{children}</span>
     </span>
   );
 };
