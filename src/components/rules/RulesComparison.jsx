@@ -130,7 +130,7 @@ export const RulesComparison = () => {
                       }`}
                     >
                       <td className="py-3.5 px-4 font-bold text-slate-900">
-                        {catB.category}
+                        {language === 'bn' ? (catB.categoryBn || catB.category) : catB.category}
                       </td>
                       <td className="py-3.5 px-4 text-right font-semibold text-slate-600">
                         {catA ? formatMoney(catA.limit) : 'N/A'}
@@ -180,7 +180,9 @@ export const RulesComparison = () => {
                 <span className="font-extrabold text-sm text-slate-800">
                   {language === 'bn' ? `করবর্ষ ${yearA} এর কর ধাপ` : `Assessment Year ${yearA} Slabs`}
                 </span>
-                <span className="text-xs text-slate-500 font-semibold">{dataA.act}</span>
+                <span className="text-xs text-slate-500 font-semibold">
+                  {language === 'bn' ? (dataA.actBn || dataA.act) : dataA.act}
+                </span>
               </div>
               <div className="space-y-2">
                 {dataA.slabs.map((s, idx) => (
@@ -188,7 +190,9 @@ export const RulesComparison = () => {
                     key={idx}
                     className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between text-xs sm:text-sm"
                   >
-                    <span className="font-semibold text-slate-800">{s.range}</span>
+                    <span className="font-semibold text-slate-800">
+                      {language === 'bn' ? (s.rangeBn || s.range) : s.range}
+                    </span>
                     <span className="font-extrabold text-slate-900 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
                       {formatNumber(s.rate)}%
                     </span>
@@ -203,7 +207,9 @@ export const RulesComparison = () => {
                 <span className="font-extrabold text-sm text-slate-800">
                   {language === 'bn' ? `করবর্ষ ${yearB} এর কর ধাপ` : `Assessment Year ${yearB} Slabs`}
                 </span>
-                <span className="text-xs text-emerald-700 font-semibold">{dataB.act}</span>
+                <span className="text-xs text-emerald-700 font-semibold">
+                  {language === 'bn' ? (dataB.actBn || dataB.act) : dataB.act}
+                </span>
               </div>
               <div className="space-y-2">
                 {dataB.slabs.map((s, idx) => (
@@ -211,7 +217,9 @@ export const RulesComparison = () => {
                     key={idx}
                     className="p-3 bg-white rounded-xl border border-slate-200 shadow-sm flex items-center justify-between text-xs sm:text-sm"
                   >
-                    <span className="font-semibold text-slate-800">{s.range}</span>
+                    <span className="font-semibold text-slate-800">
+                      {language === 'bn' ? (s.rangeBn || s.range) : s.range}
+                    </span>
                     <span className="font-extrabold text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
                       {formatNumber(s.rate)}%
                     </span>
@@ -244,28 +252,30 @@ export const RulesComparison = () => {
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <span className="text-slate-600">{language === 'bn' ? 'রেয়াতের শতকরা হার:' : 'Rebate Percentage:'}</span>
                 <span className="font-bold text-slate-900">
-                  {language === 'bn' ? `করবর্ষ ${yearA}: ${dataA.rebateRules.rateFormatted} | করবর্ষ ${yearB}: ${dataB.rebateRules.rateFormatted}` : `AY ${yearA}: ${dataA.rebateRules.rateFormatted} | AY ${yearB}: ${dataB.rebateRules.rateFormatted}`}
+                  {language === 'bn'
+                    ? `করবর্ষ ${yearA}: ${dataA.rebateRules.rateFormattedBn || dataA.rebateRules.rateFormatted} | করবর্ষ ${yearB}: ${dataB.rebateRules.rateFormattedBn || dataB.rebateRules.rateFormatted}`
+                    : `AY ${yearA}: ${dataA.rebateRules.rateFormatted} | AY ${yearB}: ${dataB.rebateRules.rateFormatted}`}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <span className="text-slate-600">{language === 'bn' ? 'করযোগ্য আয়ের সর্বোচ্চ সীমা:' : 'Taxable Income Cap:'}</span>
                 <span className="font-bold text-slate-900">
-                  {dataB.rebateRules.incomeCeilingFormatted}
+                  {language === 'bn' ? (dataB.rebateRules.incomeCeilingFormattedBn || dataB.rebateRules.incomeCeilingFormatted) : dataB.rebateRules.incomeCeilingFormatted}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <span className="text-slate-600">{language === 'bn' ? 'আইনগত সর্বোচ্চ সীমা:' : 'Max Statutory Cap:'}</span>
                 <span className="font-bold text-slate-900">
-                  {dataB.rebateRules.maxStatutoryCapFormatted}
+                  {language === 'bn' ? (dataB.rebateRules.maxStatutoryCapFormattedBn || dataB.rebateRules.maxStatutoryCapFormatted) : dataB.rebateRules.maxStatutoryCapFormatted}
                 </span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
                 <span className="text-slate-600">{language === 'bn' ? 'ডিপিএস বার্ষিক সীমা:' : 'DPS Annual Limit:'}</span>
                 <span className="font-bold text-slate-900">
-                  {dataB.rebateRules.dpsAnnualCapFormatted}
+                  {language === 'bn' ? (dataB.rebateRules.dpsAnnualCapFormattedBn || dataB.rebateRules.dpsAnnualCapFormatted) : dataB.rebateRules.dpsAnnualCapFormatted}
                 </span>
               </div>
             </div>
@@ -296,8 +306,12 @@ export const RulesComparison = () => {
                     className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"
                   >
                     <div>
-                      <span className="font-bold text-slate-900 block">{zB.area}</span>
-                      <span className="text-[11px] text-slate-500">{zB.description}</span>
+                      <span className="font-bold text-slate-900 block">
+                        {language === 'bn' ? (zB.areaBn || zB.area) : zB.area}
+                      </span>
+                      <span className="text-[11px] text-slate-500">
+                        {language === 'bn' ? (zB.descriptionBn || zB.description) : zB.description}
+                      </span>
                     </div>
                     <span className="font-black text-slate-900 shrink-0 ml-2">
                       {formatMoney(zB.amount)}

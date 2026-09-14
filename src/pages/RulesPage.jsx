@@ -143,10 +143,10 @@ export const RulesPage = () => {
                   </span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
-                  {currentRule.act}
+                  {language === 'bn' ? (currentRule.actBn || currentRule.act) : currentRule.act}
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-                  {currentRule.gazetteRef} • {language === 'bn' ? `আয়বর্ষ: ${currentRule.incomeYear}` : `Income Year: ${currentRule.incomeYear}`} • {language === 'bn' ? `অবস্থা: ${currentRule.status}` : `Status: ${currentRule.status}`}
+                  {(language === 'bn' ? (currentRule.gazetteRefBn || currentRule.gazetteRef) : currentRule.gazetteRef)} • {language === 'bn' ? `আয়বর্ষ: ${currentRule.incomeYear}` : `Income Year: ${currentRule.incomeYear}`} • {language === 'bn' ? `অবস্থা: ${currentRule.statusBn || currentRule.status}` : `Status: ${currentRule.status}`}
                 </p>
               </div>
 
@@ -194,12 +194,14 @@ export const RulesPage = () => {
                     >
                       <div>
                         <span className="font-bold text-slate-900 text-xs sm:text-sm block">
-                          {item.category}
+                          {language === 'bn' ? (item.categoryBn || item.category) : item.category}
                         </span>
-                        <span className="text-[11px] text-slate-500">{item.description}</span>
+                        <span className="text-[11px] text-slate-500">
+                          {language === 'bn' ? (item.descriptionBn || item.description) : item.description}
+                        </span>
                       </div>
                       <span className="text-xs sm:text-sm font-black text-emerald-800 bg-white px-2.5 py-1 rounded-xl border border-slate-200 shrink-0 ml-2">
-                        {formatMoney(item.amount)}
+                        {formatMoney(item.limit || item.amount)}
                       </span>
                     </div>
                   ))}
@@ -235,7 +237,7 @@ export const RulesPage = () => {
                       {currentRule.slabs.map((slab) => (
                         <tr key={slab.sequence} className="hover:bg-slate-50/60">
                           <td className="py-3 px-3 font-bold text-slate-900">
-                            {slab.range}
+                            {language === 'bn' ? (slab.rangeBn || slab.range) : slab.range}
                           </td>
                           <td className="py-3 px-3 text-center">
                             <span
@@ -251,7 +253,7 @@ export const RulesPage = () => {
                             </span>
                           </td>
                           <td className="py-3 px-3 text-slate-600 text-xs">
-                            {slab.description}
+                            {language === 'bn' ? (slab.descriptionBn || slab.description) : slab.description}
                           </td>
                         </tr>
                       ))}
@@ -283,25 +285,25 @@ export const RulesPage = () => {
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
                     <span className="text-slate-600">{language === 'bn' ? 'রেয়াতের হার:' : 'Rebate Rate:'}</span>
                     <span className="font-bold text-slate-900">
-                      {currentRule.rebateRules.rateFormatted}
+                      {language === 'bn' ? (currentRule.rebateRules.rateFormattedBn || currentRule.rebateRules.rateFormatted) : currentRule.rebateRules.rateFormatted}
                     </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
                     <span className="text-slate-600">{language === 'bn' ? 'আয়ের সর্বোচ্চ সীমা:' : 'Income Cap:'}</span>
                     <span className="font-bold text-slate-900">
-                      {currentRule.rebateRules.incomeCeilingFormatted}
+                      {language === 'bn' ? (currentRule.rebateRules.incomeCeilingFormattedBn || currentRule.rebateRules.incomeCeilingFormatted) : currentRule.rebateRules.incomeCeilingFormatted}
                     </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
                     <span className="text-slate-600">{language === 'bn' ? 'সর্বোচ্চ রেয়াত:' : 'Statutory Max:'}</span>
                     <span className="font-bold text-slate-900">
-                      {currentRule.rebateRules.maxStatutoryCapFormatted}
+                      {language === 'bn' ? (currentRule.rebateRules.maxStatutoryCapFormattedBn || currentRule.rebateRules.maxStatutoryCapFormatted) : currentRule.rebateRules.maxStatutoryCapFormatted}
                     </span>
                   </div>
                   <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex justify-between">
                     <span className="text-slate-600">{language === 'bn' ? 'ডিপিএস সীমা:' : 'DPS Cap:'}</span>
                     <span className="font-bold text-slate-900">
-                      {currentRule.rebateRules.dpsAnnualCapFormatted}
+                      {language === 'bn' ? (currentRule.rebateRules.dpsAnnualCapFormattedBn || currentRule.rebateRules.dpsAnnualCapFormatted) : currentRule.rebateRules.dpsAnnualCapFormatted}
                     </span>
                   </div>
                 </div>
@@ -330,8 +332,12 @@ export const RulesPage = () => {
                       className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between"
                     >
                       <div>
-                        <span className="font-bold text-slate-900 block">{z.area}</span>
-                        <span className="text-[10px] text-slate-500">{z.description}</span>
+                        <span className="font-bold text-slate-900 block">
+                          {language === 'bn' ? (z.areaBn || z.area) : z.area}
+                        </span>
+                        <span className="text-[10px] text-slate-500">
+                          {language === 'bn' ? (z.descriptionBn || z.description) : z.description}
+                        </span>
                       </div>
                       <span className="font-black text-slate-900 bg-white px-2 py-1 rounded-lg border border-slate-200 shrink-0 ml-2">
                         {formatMoney(z.amount)}
@@ -359,14 +365,14 @@ export const RulesPage = () => {
 
                 <div className="space-y-2 text-xs">
                   <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-slate-600">
-                    {language === 'bn' ? 'প্রারম্ভিক সীমা:' : 'Threshold:'} <strong className="text-slate-900">{currentRule.surchargeRules.wealthThresholdFormatted}</strong>
+                    {language === 'bn' ? 'প্রারম্ভিক সীমা:' : 'Threshold:'} <strong className="text-slate-900">{language === 'bn' ? (currentRule.surchargeRules.wealthThresholdFormattedBn || currentRule.surchargeRules.wealthThresholdFormatted) : currentRule.surchargeRules.wealthThresholdFormatted}</strong>
                   </div>
                   {currentRule.surchargeRules.tiers.slice(1, 4).map((t, idx) => (
                     <div
                       key={idx}
                       className="p-2 bg-slate-50 rounded-xl border border-slate-200 flex justify-between"
                     >
-                      <span className="text-slate-600 truncate">{t.tier}:</span>
+                      <span className="text-slate-600 truncate">{language === 'bn' ? (t.tierBn || t.tier) : t.tier}:</span>
                       <span className="font-bold text-purple-700">{formatNumber(t.rate)}%</span>
                     </div>
                   ))}
@@ -399,10 +405,10 @@ export const RulesPage = () => {
                         <span>{doc.reference}</span>
                       </div>
                       <h4 className="font-bold text-slate-900 text-xs sm:text-sm">
-                        {doc.title}
+                        {language === 'bn' ? (doc.titleBn || doc.title) : doc.title}
                       </h4>
                       <p className="text-[11px] text-slate-500 mt-1">
-                        {doc.authority} • {doc.date}
+                        {(language === 'bn' ? (doc.authorityBn || doc.authority) : doc.authority)} • {(language === 'bn' ? (doc.dateBn || doc.date) : doc.date)}
                       </p>
                     </div>
 
