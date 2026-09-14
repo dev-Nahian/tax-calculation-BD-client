@@ -1,72 +1,96 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getStorageItem, setStorageItem, removeStorageItem } from '../utils/storage';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { getStorageItem, setStorageItem, removeStorageItem, STORAGE_KEYS } from '../utils/storage';
 import apiClient from '../services/api';
 
-const ADMIN_TOKEN_KEY = 'taxbd_admin_token';
-const ADMIN_USER_KEY = 'taxbd_admin_user';
+const ALLOWED_ADMIN_ROLES = ['admin', 'super_admin', 'tax_officer'];
 
 const AdminAuthContext = createContext(null);
 
 export const AdminAuthProvider = ({ children }) => {
   const [adminUser, setAdminUser] = useState(() => {
-    return getStorageItem(ADMIN_USER_KEY, {
-      name: 'Tax Policy Administrator',
-      email: 'admin@taxbd.gov.bd',
-      role: 'super_admin',
-      department: 'NBR Tax Research Unit',
-    });
+    return getStorageItem(STORAGE_KEYS.ADMIN_USER, null);
   });
 
   const [token, setToken] = useState(() => {
-    return getStorageItem(ADMIN_TOKEN_KEY, 'mock-admin-token-authenticated');
+    return getStorageItem(STORAGE_KEYS.ADMIN_TOKEN, null);
   });
 
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const storedToken = getStorageItem(STORAGE_KEYS.ADMIN_TOKEN, null);
+    const storedUser = getStorageItem(STORAGE_KEYS.ADMIN_USER, null);
+    return !!(storedToken && storedUser && ALLOWED_ADMIN_ROLES.includes(storedUser.role));
+  });
 
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  const logout = useCallback(() => {
+    setToken(null);
+    setAdminUser(null);
+    setIsAuthenticated(false);
+    removeStorageItem(STORAGE_KEYS.ADMIN_TOKEN);
+    removeStorageItem(STORAGE_KEYS.ADMIN_USER);
+  }, []);
+
+  // Validate stored session on mount
   useEffect(() => {
-    if (token) {
-      setIsAuthenticated(true);
-      setStorageItem(ADMIN_TOKEN_KEY, token);
-      setStorageItem(ADMIN_USER_KEY, adminUser);
-    } else {
-      setIsAuthenticated(false);
-      removeStorageItem(ADMIN_TOKEN_KEY);
-      removeStorageItem(ADMIN_USER_KEY);
-    }
-  }, [token, adminUser]);
+    const verifySession = async () => {
+      const storedToken = getStorageItem(STORAGE_KEYS.ADMIN_TOKEN, null);
+      const storedUser = getStorageItem(STORAGE_KEYS.ADMIN_USER, null);
+
+      if (storedToken && storedUser && ALLOWED_ADMIN_ROLES.includes(storedUser.role)) {
+        setIsAuthenticated(true);
+        setAdminUser(storedUser);
+        setToken(storedToken);
+      } else {
+        logout();
+      }
+      setCheckingAuth(false);
+    };
+
+    verifySession();
+  }, [logout]);
 
   const login = async (email, password) => {
     try {
       const res = await apiClient.post('/auth/login', { email, password });
-      if (res?.data?.token) {
-        setToken(res.data.token);
-        setAdminUser(res.data.user || { name: 'Admin', email, role: 'admin' });
-        return { success: true };
-      }
-    } catch (err) {
-      // Allow demo admin login if server auth fails
-      if (email === 'admin@taxbd.gov.bd' || password === 'admin123' || email.includes('admin')) {
-        const demoUser = {
-          name: 'Chief Tax Policy Administrator',
-          email: email || 'admin@taxbd.gov.bd',
-          role: 'super_admin',
-          department: 'NBR Tax Research Unit',
-        };
-        setToken('demo-session-token-' + Date.now());
-        setAdminUser(demoUser);
-        return { success: true };
-      }
-      return { success: false, message: err.response?.data?.message || 'Invalid admin credentials' };
-    }
-    return { success: true };
-  };
+      const data = res?.data || res;
 
-  const logout = () => {
-    setToken(null);
-    setAdminUser(null);
-    setIsAuthenticated(false);
-    removeStorageItem(ADMIN_TOKEN_KEY);
-    removeStorageItem(ADMIN_USER_KEY);
+      if (!data?.token || !data?.user) {
+        return {
+          success: false,
+          message: 'Invalid response format from authentication server.',
+        };
+      }
+
+      const user = data.user;
+
+      // Strict Role-Based Access Control: Regular users cannot access Admin Suite
+      if (!ALLOWED_ADMIN_ROLES.includes(user.role)) {
+        logout();
+        return {
+          success: false,
+          message: `Access Denied: Account '${email}' is registered with role '${user.role}'. Only authorized tax administrators and officers can access the Admin Portal.`,
+        };
+      }
+
+      setToken(data.token);
+      setAdminUser(user);
+      setIsAuthenticated(true);
+      setStorageItem(STORAGE_KEYS.ADMIN_TOKEN, data.token);
+      setStorageItem(STORAGE_KEYS.ADMIN_USER, user);
+
+      return { success: true, user };
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        'Authentication failed. Please verify your admin credentials.';
+
+      return {
+        success: false,
+        message: errorMessage,
+      };
+    }
   };
 
   return (
@@ -75,8 +99,10 @@ export const AdminAuthProvider = ({ children }) => {
         adminUser,
         token,
         isAuthenticated,
+        checkingAuth,
         login,
         logout,
+        allowedRoles: ALLOWED_ADMIN_ROLES,
       }}
     >
       {children}
@@ -93,3 +119,4 @@ export const useAdminAuth = () => {
 };
 
 export default AdminAuthContext;
+

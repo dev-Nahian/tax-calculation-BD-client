@@ -11,10 +11,19 @@ const apiClient = axios.create({
   timeout: 10000,
 });
 
-// Request interceptor to attach JWT token
+// Request interceptor to attach appropriate JWT token (Admin token takes precedence on /admin routes)
 apiClient.interceptors.request.use(
   (config) => {
-    const token = getStorageItem(STORAGE_KEYS.AUTH_TOKEN);
+    const isAdminRequest =
+      config.url?.startsWith('/admin') ||
+      config.url?.startsWith('admin') ||
+      (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin'));
+
+    const adminToken = getStorageItem(STORAGE_KEYS.ADMIN_TOKEN);
+    const userToken = getStorageItem(STORAGE_KEYS.AUTH_TOKEN);
+
+    // Prioritize adminToken for administrative endpoints, userToken for public/taxpayer endpoints
+    const token = isAdminRequest ? (adminToken || userToken) : (userToken || adminToken);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,9 +36,28 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => response.data,
   (error) => {
+    const status = error.response?.status;
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      'Something went wrong with the request';
+
+    // Auto-logout from admin portal if admin token is invalid, expired, or forbidden
+    if (status === 401 || status === 403) {
+      if (typeof window !== 'undefined' && window.location.pathname.startsWith('/admin') && !window.location.pathname.includes('/admin/login')) {
+        try {
+          localStorage.removeItem(STORAGE_KEYS.ADMIN_TOKEN);
+          localStorage.removeItem(STORAGE_KEYS.ADMIN_USER);
+        } catch {
+          // ignore storage error
+        }
+      }
+    }
+
     const customError = {
-      message: error.response?.data?.message || error.message || 'Something went wrong with the request',
-      status: error.response?.status,
+      message,
+      status,
       errors: error.response?.data?.errors,
     };
     return Promise.reject(customError);

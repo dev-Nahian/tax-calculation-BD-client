@@ -1,8 +1,9 @@
 import React, { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import AdminLayout from '../layouts/AdminLayout';
 import { CardSkeleton } from '../components/common/Skeleton';
+import { useAdminAuth } from '../context/AdminAuthContext';
 
 // Lazy load public pages
 const HomePage = lazy(() => import('../pages/HomePage'));
@@ -34,6 +35,26 @@ const PageLoader = () => (
   </div>
 );
 
+/**
+ * Strict Admin Protected Route Guard:
+ * Blocks unauthenticated visitors and standard users (role !== 'admin' && role !== 'super_admin' && role !== 'tax_officer')
+ */
+const AdminProtectedRoute = ({ children }) => {
+  const { isAuthenticated, adminUser, checkingAuth, allowedRoles } = useAdminAuth();
+  const location = useLocation();
+
+  if (checkingAuth) {
+    return <PageLoader />;
+  }
+
+  const validRoles = allowedRoles || ['admin', 'super_admin', 'tax_officer'];
+  if (!isAuthenticated || !validRoles.includes(adminUser?.role)) {
+    return <Navigate to="/admin/login" replace state={{ from: location.pathname, reason: 'unauthorized' }} />;
+  }
+
+  return children;
+};
+
 export const AppRoutes = () => {
   return (
     <Suspense fallback={<PageLoader />}>
@@ -55,8 +76,15 @@ export const AppRoutes = () => {
         {/* Admin Login */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
 
-        {/* Admin Suite Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* Protected Admin Suite Routes */}
+        <Route
+          path="/admin"
+          element={
+            <AdminProtectedRoute>
+              <AdminLayout />
+            </AdminProtectedRoute>
+          }
+        >
           <Route index element={<AdminDashboardPage />} />
           <Route path="tax-years" element={<AdminTaxYearsPage />} />
           <Route path="tax-rules" element={<AdminTaxRulesPage />} />

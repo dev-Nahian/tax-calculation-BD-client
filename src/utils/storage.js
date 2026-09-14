@@ -2,6 +2,8 @@ const STORAGE_KEYS = {
   CALCULATOR_DRAFT: 'taxbd_calculator_draft',
   AUTH_TOKEN: 'taxbd_auth_token',
   USER_DATA: 'taxbd_user_data',
+  ADMIN_TOKEN: 'taxbd_admin_token',
+  ADMIN_USER: 'taxbd_admin_user',
 };
 
 export const getStorageItem = (key, defaultValue = null) => {

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Calculator, Menu, X, ArrowRight } from 'lucide-react';
+import { Calculator, Menu, X, ArrowRight, Shield } from 'lucide-react';
 import { NAV_LINKS } from '../../constants/navigation';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAdminAuth } from '../../context/AdminAuthContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import Button from './Button';
 
@@ -11,6 +12,7 @@ export const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const { t, isBengali } = useLanguage();
+  const { isAuthenticated: isAdminAuthenticated } = useAdminAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -76,6 +78,18 @@ export const Navbar = () => {
 
           {/* Action CTA & Language Switcher */}
           <div className="hidden sm:flex items-center gap-2.5">
+            {isAdminAuthenticated && (
+              <Link
+                to="/admin"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-bold transition-all shadow-xs"
+                title="Open Admin Suite"
+              >
+                <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Admin Suite</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              </Link>
+            )}
+
             <LanguageSwitcher />
 
             <Link to="/calculate">
@@ -127,6 +141,19 @@ export const Navbar = () => {
                 {t(link.key, link.name)}
               </NavLink>
             ))}
+
+            {isAdminAuthenticated && (
+              <NavLink
+                to="/admin"
+                className="px-4 py-3 rounded-xl text-base font-bold bg-emerald-50 text-emerald-900 border border-emerald-200 flex items-center justify-between"
+              >
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-emerald-600" />
+                  <span>Admin Suite</span>
+                </div>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </NavLink>
+            )}
           </div>
 
           <div className="mt-4 pt-4 border-t border-slate-100 flex flex-col gap-3">

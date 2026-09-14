@@ -3,7 +3,8 @@ export const NAV_LINKS = [
   { name: 'Tax Calculator', key: 'nav.calculator', path: '/calculate' },
   { name: 'Tax Guide', key: 'nav.taxGuide', path: '/tax-guide' },
   { name: 'Tax Rules', key: 'nav.taxRules', path: '/tax-rules' },
-  { name: 'Admin', key: 'nav.admin', path: '/admin' },
+  { name: 'FAQ', key: 'nav.faq', path: '/faq' },
+  { name: 'About', key: 'nav.about', path: '/about' },
 ];
 
 export const FOOTER_LINKS = {
