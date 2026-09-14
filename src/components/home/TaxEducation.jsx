@@ -4,6 +4,7 @@ import Card from '../common/Card';
 import Badge from '../common/Badge';
 import { EDUCATION_TOPICS } from '../../constants/educationData';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '../../context/LanguageContext';
 
 const iconMap = {
   Calculator: BookOpen,
@@ -14,19 +15,24 @@ const iconMap = {
 
 export const TaxEducation = () => {
   const [expandedId, setExpandedId] = useState(EDUCATION_TOPICS[0].id);
+  const { isBengali } = useLanguage();
 
   return (
     <section className="py-16 md:py-24 bg-white border-b border-slate-200/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
           <Badge variant="emerald" icon={BookOpen} className="mb-3">
-            Tax Education
+            {isBengali ? 'আয়কর শিক্ষা' : 'Tax Education'}
           </Badge>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 text-balance">
-            Essential Bangladesh tax concepts made simple.
+            {isBengali
+              ? 'বাংলাদেশ আয়করের প্রয়োজনীয় মূল ধারণাগুলো জানুন।'
+              : 'Essential Bangladesh tax concepts made simple.'}
           </h2>
           <p className="text-base sm:text-lg text-slate-600 leading-relaxed text-balance">
-            Learn the foundational concepts behind the Income Tax Act 2023 so you can plan your finances and save with confidence.
+            {isBengali
+              ? 'আয়কর আইন ২০২৩-এর মৌলিক নিয়মগুলো সহজ ভাষায় বুঝে নিন এবং আত্মবিশ্বাসের সাথে কর পরিকল্পনা ও সাশ্রয় করুন।'
+              : 'Learn the foundational concepts behind the Income Tax Act 2023 so you can plan your finances and save with confidence.'}
           </p>
         </div>
 
@@ -50,13 +56,13 @@ export const TaxEducation = () => {
                     </div>
                     <div>
                       <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                        {topic.badge}
+                        {isBengali && topic.badgeBn ? topic.badgeBn : topic.badge}
                       </span>
                       <h3 className="text-base font-bold text-slate-900 mt-1.5">
-                        {topic.title}
+                        {isBengali && topic.titleBn ? topic.titleBn : topic.title}
                       </h3>
                       <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                        {topic.shortDesc}
+                        {isBengali && topic.shortDescBn ? topic.shortDescBn : topic.shortDesc}
                       </p>
                     </div>
                   </div>
@@ -70,7 +76,7 @@ export const TaxEducation = () => {
 
                 {isExpanded && (
                   <div className="mt-4 pt-4 border-t border-slate-100 text-xs sm:text-sm text-slate-600 leading-relaxed bg-slate-50/70 p-3.5 rounded-xl animate-fadeIn">
-                    {topic.details}
+                    {isBengali && topic.detailsBn ? topic.detailsBn : topic.details}
                   </div>
                 )}
               </Card>
@@ -83,7 +89,11 @@ export const TaxEducation = () => {
             to="/guide"
             className="inline-flex items-center gap-2 text-sm font-bold text-brand-900 hover:text-brand-700 transition-colors"
           >
-            <span>Read our complete beginner-friendly Tax Guide</span>
+            <span>
+              {isBengali
+                ? 'আমাদের সম্পূর্ণ আয়কর নির্দেশিকা ও পরিভাষা পড়ুন'
+                : 'Read our complete beginner-friendly Tax Guide'}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
