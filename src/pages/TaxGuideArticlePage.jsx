@@ -32,6 +32,7 @@ export const TaxGuideArticlePage = () => {
   if (!article) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-4">
+        <SEO title="Article Not Found — TaxBD" />
         <h2 className="text-2xl font-black text-slate-900">
           {isBengali ? 'গাইডটি খুঁজে পাওয়া যায়নি' : 'Article Not Found'}
         </h2>
@@ -57,6 +58,21 @@ export const TaxGuideArticlePage = () => {
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
+
+  const currentSteps =
+    isBengali && article.visualExample?.stepsBn
+      ? article.visualExample.stepsBn
+      : article.visualExample?.steps || [];
+
+  const currentConclusion =
+    isBengali && article.visualExample?.conclusionBn
+      ? article.visualExample.conclusionBn
+      : article.visualExample?.conclusion || '';
+
+  const currentMistakes =
+    isBengali && article.commonMistakesBn
+      ? article.commonMistakesBn
+      : article.commonMistakes || [];
 
   return (
     <div className="pb-24 animate-fadeIn">
@@ -134,7 +150,7 @@ export const TaxGuideArticlePage = () => {
         <div className="bg-gradient-to-br from-emerald-950 via-slate-900 to-emerald-900 rounded-3xl p-6 sm:p-8 text-white shadow-xl space-y-4 border border-emerald-500/20">
           <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-emerald-400">
             <Sparkles className="w-4 h-4" />
-            <span>{isBengali ? "সহজ ব্যাখ্যা মোড (Explain Like I'm New to Tax)" : "Explain Like I'm New to Tax"}</span>
+            <span>{isBengali ? "সহজ ব্যাখ্যা মোড (Plain Language Mode)" : "Explain Like I'm New to Tax"}</span>
           </div>
 
           <div className="space-y-3">
@@ -153,10 +169,10 @@ export const TaxGuideArticlePage = () => {
         <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-3">
           <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-500">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-            <span>{t('guide.whoItAppliesTo', 'Who it applies to')}</span>
+            <span>{isBengali ? 'কাদের জন্য প্রযোজ্য' : 'Who it applies to'}</span>
           </div>
           <p className="text-sm sm:text-base text-slate-800 font-medium leading-relaxed">
-            {article.whoItAppliesTo}
+            {isBengali && article.whoItAppliesToBn ? article.whoItAppliesToBn : article.whoItAppliesTo}
           </p>
         </div>
 
@@ -165,7 +181,7 @@ export const TaxGuideArticlePage = () => {
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-5">
             <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-blue-700">
               <Layers className="w-4 h-4" />
-              <span>{t('guide.practicalExample', 'Practical Breakdown Scenario')}</span>
+              <span>{isBengali ? 'বাস্তব হিসাবের দৃশ্যকল্প' : 'Practical Breakdown Scenario'}</span>
             </div>
 
             <h3 className="text-lg sm:text-xl font-black text-slate-900">
@@ -173,7 +189,7 @@ export const TaxGuideArticlePage = () => {
             </h3>
 
             <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-2.5">
-              {article.visualExample.steps.map((step, idx) => (
+              {currentSteps.map((step, idx) => (
                 <div key={idx} className="flex items-start gap-3 text-xs sm:text-sm">
                   <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
                     {idx + 1}
@@ -183,22 +199,24 @@ export const TaxGuideArticlePage = () => {
               ))}
             </div>
 
-            <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs sm:text-sm text-emerald-900 font-bold">
-              💡 {article.visualExample.conclusion}
-            </div>
+            {currentConclusion && (
+              <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-200 text-xs sm:text-sm text-emerald-900 font-bold">
+                💡 {currentConclusion}
+              </div>
+            )}
           </div>
         )}
 
         {/* Common Mistakes to Avoid */}
-        {article.commonMistakes && article.commonMistakes.length > 0 && (
+        {currentMistakes.length > 0 && (
           <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/90 shadow-sm space-y-4">
             <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-red-600">
               <AlertTriangle className="w-4 h-4" />
-              <span>{t('guide.commonMistakes', 'Common Mistakes & Pitfalls to Avoid')}</span>
+              <span>{isBengali ? 'সচরাচর যেসব ভুল এড়িয়ে চলবেন' : 'Common Mistakes & Pitfalls to Avoid'}</span>
             </div>
 
             <ul className="space-y-3">
-              {article.commonMistakes.map((mistake, idx) => (
+              {currentMistakes.map((mistake, idx) => (
                 <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
                   <span className="w-2 h-2 rounded-full bg-red-500 shrink-0 mt-1.5" />
                   <span>{mistake}</span>
@@ -212,7 +230,7 @@ export const TaxGuideArticlePage = () => {
         <div className="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200/90 space-y-5">
           <div className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-wider text-slate-600">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>{t('guide.officialSource', 'Official Source & Verification')}</span>
+            <span>{isBengali ? 'অফিশিয়াল সংবিধিবদ্ধ তথ্যসূত্র' : 'Official Source & Verification'}</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -248,7 +266,7 @@ export const TaxGuideArticlePage = () => {
               onClick={() => setIsSourceModalOpen(true)}
               className="self-start sm:self-auto inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold shadow-sm transition-all shrink-0"
             >
-              <ExternalLink className="w-3.5 h-3.5" /> {t('common.viewSource', 'View official source')}
+              <ExternalLink className="w-3.5 h-3.5" /> {isBengali ? 'অফিশিয়াল গেজেট সূত্র' : 'View official source'}
             </button>
           </div>
         </div>
@@ -270,7 +288,7 @@ export const TaxGuideArticlePage = () => {
             to="/calculate"
             className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-emerald-800 hover:bg-emerald-50 rounded-2xl font-black text-sm shadow-lg transition-all transform hover:-translate-y-0.5 shrink-0"
           >
-            <Calculator className="w-4 h-4" /> {t('nav.calculateCTA', 'Open Tax Calculator')}
+            <Calculator className="w-4 h-4" /> {isBengali ? 'কর হিসাব করুন' : 'Open Tax Calculator'}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
