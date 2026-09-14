@@ -1,19 +1,19 @@
 import apiClient from './api';
 
 export const getTaxYearsApi = async () => {
-  return await apiClient.get('/tax-years');
+  return await apiClient.get('/rules/years');
 };
 
 export const getTaxRulesByYearApi = async (year = '2024-2025') => {
-  return await apiClient.get(`/tax-rules/${year}`);
+  return await apiClient.get(`/rules/${year}`);
 };
 
 export const getTaxSourcesByYearApi = async (year = '2024-2025') => {
-  return await apiClient.get(`/tax-sources/${year}`);
+  return await apiClient.get('/rules/sources');
 };
 
 export const getAdminTaxRulesOverviewApi = async () => {
-  return await apiClient.get('/admin/tax-rules');
+  return await apiClient.get('/admin/overview');
 };
 
 export const updateTaxYearStatusApi = async (year, status) => {
@@ -23,3 +23,4 @@ export const updateTaxYearStatusApi = async (year, status) => {
 export const verifyTaxYearApi = async (year, note) => {
   return await apiClient.post(`/admin/tax-rules/${year}/verify`, { note });
 };
+
