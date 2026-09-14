@@ -1,35 +1,42 @@
 import React from 'react';
 import { DollarSign, BookOpen, Cpu, CheckCircle2, ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 export const VisualFlow = () => {
+  const { t, isBengali } = useLanguage();
+
   const steps = [
     {
-      title: '1. Income',
-      desc: 'Salary, bonuses & other sources',
+      id: 'step1',
+      title: t('home.flow.steps.step1.title', '1. Income'),
+      desc: t('home.flow.steps.step1.desc', 'Salary, bonuses & other sources'),
       icon: DollarSign,
       color: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      badge: 'Step 1',
+      badge: t('home.flow.steps.step1.badge', 'Step 1'),
     },
     {
-      title: '2. Tax Rules',
-      desc: 'Exemptions & category thresholds',
+      id: 'step2',
+      title: t('home.flow.steps.step2.title', '2. Tax Rules'),
+      desc: t('home.flow.steps.step2.desc', 'Exemptions & category thresholds'),
       icon: BookOpen,
       color: 'bg-teal-50 text-teal-700 border-teal-200',
-      badge: 'Step 2',
+      badge: t('home.flow.steps.step2.badge', 'Step 2'),
     },
     {
-      title: '3. Calculation',
-      desc: 'Progressive slabs & 15% rebate',
+      id: 'step3',
+      title: t('home.flow.steps.step3.title', '3. Calculation'),
+      desc: t('home.flow.steps.step3.desc', 'Progressive slabs & 15% rebate'),
       icon: Cpu,
       color: 'bg-blue-50 text-blue-700 border-blue-200',
-      badge: 'Step 3',
+      badge: t('home.flow.steps.step3.badge', 'Step 3'),
     },
     {
-      title: '4. Result',
-      desc: 'Clear net tax & minimum tax check',
+      id: 'step4',
+      title: t('home.flow.steps.step4.title', '4. Result'),
+      desc: t('home.flow.steps.step4.desc', 'Clear net tax & minimum tax check'),
       icon: CheckCircle2,
       color: 'bg-brand-50 text-brand-800 border-brand-200',
-      badge: 'Step 4',
+      badge: t('home.flow.steps.step4.badge', 'Step 4'),
     },
   ];
 
@@ -39,11 +46,11 @@ export const VisualFlow = () => {
         <div className="flex items-center gap-2">
           <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
           <h3 className="text-sm font-bold uppercase tracking-wider text-slate-700">
-            How TaxBD Computes Your Tax
+            {t('home.flow.title', 'How TaxBD Computes Your Tax')}
           </h3>
         </div>
         <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600 self-start sm:self-auto">
-          Income Tax Act 2023 Pipeline
+          {t('home.flow.pipeline', 'Income Tax Act 2023 Pipeline')}
         </span>
       </div>
 
@@ -52,7 +59,7 @@ export const VisualFlow = () => {
           const Icon = step.icon;
           return (
             <div
-              key={step.title}
+              key={step.id}
               className="relative flex flex-col p-4 rounded-xl border border-slate-100 bg-slate-50/70 hover:bg-white hover:border-slate-300 transition-all duration-200 group"
             >
               <div className="flex items-center justify-between mb-3">

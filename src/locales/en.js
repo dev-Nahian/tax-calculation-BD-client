@@ -73,6 +73,32 @@ export const en = {
         title: '100% NBR Verified Rules',
         desc: 'Every calculation links directly to statutory sections in the Income Tax Paripatra and Finance Acts.'
       }
+    },
+    flow: {
+      title: 'How TaxBD Computes Your Tax',
+      pipeline: 'Income Tax Act 2023 Pipeline',
+      steps: {
+        step1: {
+          badge: 'Step 1',
+          title: '1. Income',
+          desc: 'Salary, bonuses & other sources'
+        },
+        step2: {
+          badge: 'Step 2',
+          title: '2. Tax Rules',
+          desc: 'Exemptions & category thresholds'
+        },
+        step3: {
+          badge: 'Step 3',
+          title: '3. Calculation',
+          desc: 'Progressive slabs & 15% rebate'
+        },
+        step4: {
+          badge: 'Step 4',
+          title: '4. Result',
+          desc: 'Clear net tax & minimum tax check'
+        }
+      }
     }
   },
 
